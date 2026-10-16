@@ -1,0 +1,6 @@
+﻿gym_id,name,capacity,lat,lng,equipment,facilities,open_weekday,open_weekend
+1,The Boys Gym Club,80,16.45960203194147,102.82303792883634,free_weights;machine;cable;treadmill;dumbbell_to_50kg,locker;shower;parking;air_conditioning,07:00-22:00,08:00-20:00
+2,Mega Gym,120,16.436750255717545,102.84864576441815,treadmill;elliptical;smith_machine;cable;free_weights;leg_press;rowing,locker;shower;sauna;parking;air_conditioning;towel,06:00-23:00,07:00-21:00
+3,Infinity Gym,60,16.42125222406619,102.82001486441816,free_weights;squat_rack;treadmill;cable;functional_area,locker;shower;parking;24h_access,06:00-23:00,06:00-23:00
+4,Bon Fitness (KKU),100,16.4774073351376,102.81880641045419,treadmill;cable;free_weights;machines;stationary_bike,locker;shower;air_conditioning,08:00-21:00,10:00-19:00
+5,NP Park,50,16.483091798128942,102.81543046441817,free_weights;treadmill;machines;outdoor_area,parking;shower,06:00-21:00,06:00-20:00

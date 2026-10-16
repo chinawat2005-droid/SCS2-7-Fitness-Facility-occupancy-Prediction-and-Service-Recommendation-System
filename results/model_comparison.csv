@@ -1,0 +1,4 @@
+model,MAE,RMSE
+RandomForest,5.31,8.06
+XGBoost,5.38,8.16
+LinearRegression,14.52,19.27
