@@ -1,2 +1,6 @@
 __pycache__/
 models/
+gym.db
+.venv/
+*.pyc
+.env
