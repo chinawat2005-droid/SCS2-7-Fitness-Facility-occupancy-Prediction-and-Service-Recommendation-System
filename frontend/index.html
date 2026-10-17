@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ฟิตเนสใกล้คุณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--bg:#f4f6f3;--card:#fff;--ink:#16241f;--mute:#5d6b66;--line:#dde4df;--accent:#0f766e;
+--low:#2e9e5b;--mid:#d39a12;--high:#d1453b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans Thai",system-ui,sans-serif;background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column}
+header{padding:14px 20px;background:var(--ink);color:#fff;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+header h1{margin:0;font-size:1.25rem;font-weight:800}
+#where{font-size:.85rem;opacity:.8}
+main{flex:1;display:grid;grid-template-columns:400px 1fr;min-height:0}
+aside{overflow:auto;padding:14px;border-right:1px solid var(--line)}
+#map{height:100%;min-height:320px}
+.tools{display:flex;gap:8px;margin-bottom:12px}
+.tools button{flex:1;padding:8px;border:1px solid var(--line);background:var(--card);border-radius:8px;font:inherit;cursor:pointer}
+.tools button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.gym{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;display:block;width:100%;text-align:left;font:inherit;color:inherit}
+.gym:hover,.gym:focus-visible{border-color:var(--accent);outline:none}
+.gym.sel{border:2px solid var(--accent)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.name{font-weight:600}
+.dist{font-weight:800;font-size:1.05rem;white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:var(--line);margin:10px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%}
+.meta{font-size:.82rem;color:var(--mute);display:flex;justify-content:space-between}
+.lv-low{color:var(--low)}.lv-medium{color:var(--mid)}.lv-high{color:var(--high)}
+.bg-low{background:var(--low)}.bg-medium{background:var(--mid)}.bg-high{background:var(--high)}
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.9rem;cursor:default}
+.detail h4{margin:10px 0 6px;font-size:.85rem;color:var(--mute);font-weight:600}
+.chips span{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin:0 6px 6px 0;font-size:.8rem}
+#msg{padding:12px;color:var(--mute)}
+#msg.err{color:var(--high)}
+@media(max-width:800px){main{grid-template-columns:1fr;grid-template-rows:300px 1fr}#map{order:-1}aside{border-right:0}}
+</style>
+</head>
+<body>
+<header><h1>ฟิตเนสใกล้คุณ</h1><span id="where">กำลังหาตำแหน่ง…</span></header>
+<main>
+  <aside>
+    <div class="tools" role="group" aria-label="เรียงลำดับ">
+      <button id="s-dist" aria-pressed="true">ใกล้ที่สุด</button>
+      <button id="s-quiet" aria-pressed="false">ว่างที่สุด</button>
+    </div>
+    <div id="msg">กำลังโหลดรายการ…</div>
+    <div id="list"></div>
+  </aside>
+  <div id="map" role="application" aria-label="แผนที่ฟิตเนส"></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const FALLBACK = {lat:16.4745, lng:102.8226, label:"ตำแหน่งสำรอง: มหาวิทยาลัยขอนแก่น"};
+const LEVEL = {low:"คนน้อย", medium:"ปานกลาง", high:"คนแน่น"};
+const COLOR = {low:"#2e9e5b", medium:"#d39a12", high:"#d1453b"};
+const TH = {free_weights:"ฟรีเวท",machine:"เครื่องเวท",cable:"เคเบิล",treadmill:"ลู่วิ่ง",elliptical:"เครื่องเดินวงรี",
+  smith_machine:"สมิทมาชีน",leg_press:"เลกเพรส",rowing:"เครื่องพาย",squat_rack:"แร็คสควอท",
+  locker:"ตู้ล็อกเกอร์",shower:"ห้องอาบน้ำ",sauna:"ซาวน่า",parking:"ที่จอดรถ",air_conditioning:"แอร์",towel:"ผ้าเช็ดตัว"};
+const t = k => TH[k] || k.replaceAll("_"," ");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let gyms = [], sortBy = "dist", selected = null, user = FALLBACK;
+const map = L.map("map").setView([user.lat, user.lng], 13);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom:19, attribution:"&copy; OpenStreetMap"}).addTo(map);
+let userMarker = null, markers = {};
+
+function getPosition(){
+  return new Promise(res => {
+    if(!navigator.geolocation) return res(FALLBACK);
+    navigator.geolocation.getCurrentPosition(
+      p => res({lat:p.coords.latitude, lng:p.coords.longitude, label:"ตำแหน่งของคุณ"}),
+      () => res(FALLBACK), {timeout:6000});
+  });
+}
+
+async function load(){
+  user = await getPosition();
+  document.getElementById("where").textContent = user.label;
+  userMarker = L.marker([user.lat, user.lng]).addTo(map).bindTooltip("คุณอยู่ที่นี่");
+  try{
+    const r = await fetch(`/gyms?lat=${user.lat}&lng=${user.lng}`);
+    if(!r.ok) throw new Error(r.status);
+    gyms = await r.json();
+  }catch(e){
+    const m = document.getElementById("msg");
+    m.className = "err";
+    m.textContent = "โหลดรายการไม่ได้ ตรวจว่าเปิดเซิร์ฟเวอร์ (uvicorn app.main:app) อยู่หรือไม่";
+    return;
+  }
+  document.getElementById("msg").remove();
+  gyms.forEach(g => {
+    markers[g.gym_id] = L.circleMarker([g.lat, g.lng],
+      {radius:11, color:"#fff", weight:2, fillColor:COLOR[g.current_level]||"#888", fillOpacity:.95})
+      .addTo(map).bindTooltip(esc(g.name)).on("click", () => select(g.gym_id));
+  });
+  map.invalidateSize();
+  map.fitBounds(L.latLngBounds([[user.lat,user.lng], ...gyms.map(g => [g.lat,g.lng])]).pad(.2));
+  render();
+}
+
+function render(){
+  const list = [...gyms].sort((a,b) => sortBy==="dist"
+    ? (a.distance_km ?? 1e9) - (b.distance_km ?? 1e9)
+    : (a.current_pct ?? 1e9) - (b.current_pct ?? 1e9));
+  document.getElementById("list").innerHTML = list.map(g => {
+    const lv = g.current_level, pct = g.current_pct;
+    return `<button class="gym ${g.gym_id===selected?"sel":""}" data-id="${g.gym_id}">
+      <div class="row"><span class="name">${esc(g.name)}</span>
+        <span class="dist">${g.distance_km!=null ? g.distance_km+" กม." : "-"}</span></div>
+      <div class="bar"><i class="bg-${lv}" style="width:${Math.min(pct||0,100)}%"></i></div>
+      <div class="meta"><span class="lv-${lv}">${LEVEL[lv]||"ไม่มีข้อมูล"}${pct!=null?` (${pct}%)`:""}</span>
+        <span>${g.avg_rating!=null ? "★ "+g.avg_rating : "ยังไม่มีรีวิว"}</span></div>
+      ${g.gym_id===selected ? detail(g) : ""}
+    </button>`;
+  }).join("");
+  document.querySelectorAll(".gym").forEach(b => b.onclick = () => select(+b.dataset.id));
+}
+
+function detail(g){
+  const chips = a => `<div class="chips">${a.map(x => `<span>${esc(t(x))}</span>`).join("")}</div>`;
+  return `<div class="detail">
+    <div>ความจุ ${g.capacity} คน · ตอนนี้ประมาณ ${g.current_count ?? "-"} คน</div>
+    <h4>เวลาเปิด</h4>
+    <div>จันทร์–ศุกร์ ${esc(g.open_weekday)}<br>เสาร์–อาทิตย์ ${esc(g.open_weekend)}</div>
+    <h4>อุปกรณ์</h4>${chips(g.equipment)}
+    <h4>สิ่งอำนวยความสะดวก</h4>${chips(g.facilities)}
+  </div>`;
+}
+
+function select(id){
+  selected = selected === id ? null : id;
+  render();
+  if(selected){
+    const g = gyms.find(x => x.gym_id === id);
+    map.flyTo([g.lat, g.lng], 15, {duration:.6});
+    document.querySelector(".gym.sel")?.scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
+}
+
+for(const [id, key] of [["s-dist","dist"],["s-quiet","quiet"]]){
+  document.getElementById(id).onclick = () => {
+    sortBy = key;
+    document.getElementById("s-dist").setAttribute("aria-pressed", key==="dist");
+    document.getElementById("s-quiet").setAttribute("aria-pressed", key==="quiet");
+    render();
+  };
+}
+load();
+</script>
+</body>
+</html>

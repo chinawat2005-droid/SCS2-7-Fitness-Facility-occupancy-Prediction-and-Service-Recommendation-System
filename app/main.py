@@ -56,3 +56,12 @@ def list_gyms(lat: Optional[float] = None, lng: Optional[float] = None):
         g["avg_rating"] = ratings.get(g["gym_id"])
         result.append(g)
     return result
+
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
+app.mount(
+    "/",
+    StaticFiles(directory=Path(__file__).resolve().parent.parent / "frontend", html=True),
+    name="frontend",
+)
