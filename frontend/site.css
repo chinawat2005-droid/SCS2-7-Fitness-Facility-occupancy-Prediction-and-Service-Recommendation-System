@@ -1,0 +1,31 @@
+:root{--bg:#f4f6f3;--card:#fff;--ink:#16241f;--mute:#5d6b66;--line:#dde4df;--accent:#0f766e;
+--low:#2e9e5b;--mid:#d39a12;--high:#d1453b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans Thai",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header.site{padding:12px 20px;background:var(--ink);color:#fff;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+header.site h1{margin:0;font-size:1.25rem;font-weight:800}
+header.site nav{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+header.site nav a{color:#fff;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:.92rem;opacity:.85}
+header.site nav a:hover,header.site nav a:focus-visible{opacity:1;background:rgba(255,255,255,.12);outline:none}
+header.site nav a[aria-current=page]{opacity:1;background:var(--accent)}
+.who{font-size:.88rem;display:flex;gap:10px;align-items:center}
+.who button{font:inherit;font-size:.82rem;padding:4px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer}
+.who button:hover{background:rgba(255,255,255,.12)}
+.page{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+h2{margin:0 0 4px;font-size:1.2rem}
+.sub{color:var(--mute);font-size:.9rem;margin:0 0 14px}
+label{display:block;font-size:.85rem;font-weight:600;margin:0 0 4px;color:var(--mute)}
+input,select,button.primary{font:inherit}
+input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button.primary{padding:10px 16px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;width:100%}
+button.primary:disabled{opacity:.6;cursor:wait}
+.field{margin-bottom:14px}
+.err{color:var(--high);font-size:.88rem;min-height:1.2em;margin:0 0 10px}
+.mute{color:var(--mute)}
+.auth{max-width:400px;margin:32px auto}
+.auth p.alt{text-align:center;font-size:.9rem;margin:14px 0 0}
+.auth a,.page a{color:var(--accent)}
+.lv-low{color:var(--low)}.lv-medium{color:var(--mid)}.lv-high{color:var(--high)}.lv-closed{color:var(--mute)}
+.bg-low{background:var(--low)}.bg-medium{background:var(--mid)}.bg-high{background:var(--high)}.bg-closed{background:var(--mute)}

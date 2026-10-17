@@ -4,11 +4,14 @@ from typing import Optional
 from fastapi import FastAPI
 from sqlalchemy import inspect, text
 
+from app.auth import init_users_table, router as auth_router
 from app.database import engine
 from ml.current import forecast_now
 from ml.forecast_api import router as forecast_router
 
 app = FastAPI(title="Gym Occupancy API")
+init_users_table()
+app.include_router(auth_router)
 
 
 def haversine_km(lat1, lng1, lat2, lng2):

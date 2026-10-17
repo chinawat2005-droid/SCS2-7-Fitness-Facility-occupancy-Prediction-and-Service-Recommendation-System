@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ความหนาแน่น · ฟิตเนสใกล้คุณ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<style>
+.controls{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.now{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.badge{display:inline-block;padding:3px 12px;border-radius:999px;color:#fff;font-weight:600;font-size:.9rem}
+.big{font-size:1.6rem;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.stat{background:var(--bg);border-radius:10px;padding:10px 14px}
+.stat b{display:block;font-size:.78rem;color:var(--mute);font-weight:600;margin-bottom:2px}
+.chartwrap{position:relative}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:inherit;fill:var(--mute);font-size:11px}
+svg .bar{cursor:pointer}
+svg .bar:hover,svg .bar:focus{opacity:.8;outline:none}
+svg .cur{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:4 3}
+svg .grid{stroke:var(--line);stroke-width:1}
+svg .thr{stroke:var(--mute);stroke-width:1;stroke-dasharray:5 4}
+#tip{min-height:1.5em;font-size:.92rem;margin:8px 0 0}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:var(--mute);margin-top:6px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+details{margin-top:12px}
+summary{cursor:pointer;font-size:.9rem;color:var(--mute)}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.88rem}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+.note{font-size:.8rem;color:var(--mute);margin:10px 0 0}
+@media(max-width:560px){.controls{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="site"><h1>ฟิตเนสใกล้คุณ</h1><nav></nav><div class="who"></div></header>
+<main class="page">
+  <p><a href="/index.html" style="color:var(--accent)">← กลับไปหน้ารายชื่อยิม</a></p>
+  <section class="card">
+    <h2>ความหนาแน่นของฟิตเนส</h2>
+    <p class="sub">ดูว่าตอนนี้คนแน่นแค่ไหน และพยากรณ์รายชั่วโมงของวันที่เลือก เพื่อเลือกเวลาที่คนไม่แน่น</p>
+    <div class="controls">
+      <div><label for="gym">ฟิตเนส</label><select id="gym"></select></div>
+      <div><label for="date">วันที่</label><input id="date" type="date"></div>
+    </div>
+    <p id="err" class="err" role="alert"></p>
+    <div class="now" id="now" aria-live="polite"></div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="card">
+    <h2 id="ctitle">พยากรณ์รายชั่วโมง</h2>
+    <p class="sub" id="csub"></p>
+    <div class="chartwrap"><svg id="chart" viewBox="0 0 720 320" role="img" aria-labelledby="ctitle"></svg></div>
+    <p id="tip" aria-live="polite">แตะหรือชี้ที่แท่งเพื่อดูรายละเอียดของแต่ละชั่วโมง</p>
+    <div class="legend">
+      <span><i class="bg-low"></i>คนน้อย (&lt; 35%)</span>
+      <span><i class="bg-medium"></i>ปานกลาง (35–65%)</span>
+      <span><i class="bg-high"></i>คนแน่น (≥ 65%)</span>
+      <span id="curleg" hidden><i style="border:2px dashed var(--ink)"></i>ชั่วโมงปัจจุบัน</span>
+    </div>
+    <details><summary>ดูเป็นตาราง</summary>
+      <table><thead><tr><th>เวลา</th><th>จำนวนคน (ประมาณ)</th><th>% ของความจุ</th><th>ระดับ</th></tr></thead><tbody id="rows"></tbody></table>
+    </details>
+    <p class="note" id="note"></p>
+  </section>
+</main>
+<script src="/auth.js"></script>
+<script>
+renderHeader("occupancy");
+
+const LEVEL = {low:"คนน้อย", medium:"ปานกลาง", high:"คนแน่น", closed:"ปิดอยู่"};
+const COLOR = {low:"var(--low)", medium:"var(--mid)", high:"var(--high)"};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hh = h => String(h).padStart(2,"0") + ":00";
+const todayStr = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+
+let gyms = [], seq = 0;
+
+async function init(){
+  $("date").value = todayStr();
+  try{
+    gyms = await api("/gyms");
+  }catch(e){
+    $("err").textContent = "โหลดรายการฟิตเนสไม่ได้ ตรวจว่าเปิดเซิร์ฟเวอร์ (uvicorn app.main:app) อยู่หรือไม่";
+    return;
+  }
+  $("gym").innerHTML = gyms.map(g => `<option value="${g.gym_id}">${esc(g.name)}</option>`).join("");
+  const want = new URLSearchParams(location.search).get("gym_id");
+  if(want && gyms.some(g => String(g.gym_id) === want)) $("gym").value = want;
+  $("gym").onchange = $("date").onchange = refresh;
+  refresh();
+}
+
+async function refresh(){
+  const me = ++seq;
+  const id = $("gym").value, date = $("date").value;
+  if(!id || !date) return;
+  $("err").textContent = "";
+  const isToday = date === todayStr();
+  try{
+    const [fc, now] = await Promise.all([
+      api(`/gyms/${id}/forecast?date=${date}`),
+      isToday ? api(`/gyms/${id}/now`) : Promise.resolve(null),
+    ]);
+    if(me !== seq) return;
+    const gym = gyms.find(g => String(g.gym_id) === id);
+    drawNow(gym, now, isToday);
+    drawChart(gym, fc, now);
+  }catch(e){
+    if(me !== seq) return;
+    $("err").textContent = "โหลดข้อมูลพยากรณ์ไม่ได้: " + e.message;
+  }
+}
+
+function drawNow(gym, now, isToday){
+  if(!isToday || !now){
+    $("now").innerHTML = `<span class="mute">แสดงพยากรณ์ของวันที่เลือก (ความหนาแน่นปัจจุบันแสดงเฉพาะวันนี้)</span>`;
+    return;
+  }
+  const lv = now.level;
+  $("now").innerHTML = `<span class="mute">ตอนนี้ ${hh(now.hour)}</span>
+    <span class="badge bg-${lv}">${LEVEL[lv]}</span>
+    ${lv==="closed" ? "" : `<span class="big">${now.predicted_pct}%</span><span class="mute">ประมาณ ${now.predicted_count} จาก ${now.capacity} คน</span>`}`;
+}
+
+function ranges(hours){
+  const out = []; let s = null, p = null;
+  for(const h of hours){
+    if(s === null) s = p = h;
+    else if(h === p + 1) p = h;
+    else { out.push([s,p]); s = p = h; }
+  }
+  if(s !== null) out.push([s,p]);
+  return out.map(([a,b]) => `${hh(a)}–${hh(b+1)}`).join(", ");
+}
+
+function drawChart(gym, fc, now){
+  const hours = fc.hours;
+  $("ctitle").textContent = `พยากรณ์รายชั่วโมง · ${gym.name}`;
+  $("csub").textContent = `วันที่ ${fc.date} · เวลาเปิดวันนั้น ${hours.length ? hh(hours[0].hour)+"–"+hh(hours[hours.length-1].hour+1) : "-"} · โมเดล ${fc.model}`;
+  $("note").textContent = "ข้อมูลและพยากรณ์เป็นข้อมูลจำลองเพื่อสาธิตระบบ ไม่ใช่ข้อมูลเช็กอินจริง";
+
+  if(!hours.length){
+    $("chart").innerHTML = `<text x="360" y="160" text-anchor="middle" style="font-size:14px">ฟิตเนสนี้ปิดตลอดวันที่เลือก</text>`;
+    $("stats").innerHTML = ""; $("rows").innerHTML = ""; $("tip").textContent = "";
+    return;
+  }
+
+  const low = hours.filter(h => h.level === "low").map(h => h.hour);
+  const peak = hours.reduce((a,b) => b.predicted_pct > a.predicted_pct ? b : a);
+  const quiet = hours.reduce((a,b) => b.predicted_pct < a.predicted_pct ? b : a);
+  $("stats").innerHTML = `
+    <div class="stat"><b>ช่วงที่คนน้อย (&lt; 35%)</b>${low.length ? ranges(low) : "ไม่มีช่วงที่คนน้อย"}</div>
+    <div class="stat"><b>แน่นที่สุด</b>${hh(peak.hour)} · <span class="lv-${peak.level}">${peak.predicted_pct}%</span></div>
+    <div class="stat"><b>ว่างที่สุด</b>${hh(quiet.hour)} · <span class="lv-${quiet.level}">${quiet.predicted_pct}%</span></div>`;
+
+  const W = 720, H = 320, L = 42, R = 12, T = 14, B = 34;
+  const yMax = Math.max(100, Math.ceil(Math.max(...hours.map(h => h.predicted_pct)) / 10) * 10);
+  const n = hours.length;
+  const slot = (W - L - R) / n, bw = Math.min(slot * .7, 34);
+  const y = v => T + (H - T - B) * (1 - v / yMax);
+  let s = "";
+  for(let v = 0; v <= yMax; v += 20){
+    s += `<line class="grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}%</text>`;
+  }
+  for(const v of [35,65]){
+    s += `<line class="thr" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/>`;
+  }
+  hours.forEach((h, i) => {
+    const cx = L + slot * (i + .5), top = y(h.predicted_pct);
+    const label = `${hh(h.hour)} ${LEVEL[h.level]} ${h.predicted_pct}% (ประมาณ ${h.predicted_count} คน)`;
+    s += `<rect class="bar" tabindex="0" data-i="${i}" x="${cx-bw/2}" y="${top}" width="${bw}" height="${Math.max(y(0)-top,1)}" rx="3" fill="${COLOR[h.level]}" aria-label="${label}"/>`;
+    if(n <= 12 || i % 2 === 0) s += `<text x="${cx}" y="${H-B+16}" text-anchor="middle">${h.hour}</text>`;
+    if(now && now.hour === h.hour && now.is_open){
+      s += `<rect class="cur" x="${cx-slot/2+2}" y="${T}" width="${slot-4}" height="${H-T-B}" rx="4"/>`;
+    }
+  });
+  s += `<text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle">ชั่วโมงของวัน (น.)</text>`;
+  $("chart").innerHTML = s;
+  $("curleg").hidden = !(now && now.is_open && hours.some(h => h.hour === now.hour));
+
+  const show = i => { const h = hours[i];
+    $("tip").innerHTML = `<b>${hh(h.hour)}–${hh(h.hour+1)}</b> · <span class="lv-${h.level}">${LEVEL[h.level]}</span> · ${h.predicted_pct}% · ประมาณ ${h.predicted_count} จาก ${gym.capacity} คน`; };
+  $("chart").querySelectorAll(".bar").forEach(r => {
+    const i = +r.dataset.i;
+    r.onmouseenter = r.onfocus = r.onclick = () => show(i);
+  });
+  $("tip").textContent = "แตะหรือชี้ที่แท่งเพื่อดูรายละเอียดของแต่ละชั่วโมง";
+
+  $("rows").innerHTML = hours.map(h => `<tr><td>${hh(h.hour)}</td><td>${h.predicted_count}</td><td>${h.predicted_pct}%</td><td class="lv-${h.level}">${LEVEL[h.level]}</td></tr>`).join("");
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เข้าสู่ระบบ · ฟิตเนสใกล้คุณ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<header class="site"><h1>ฟิตเนสใกล้คุณ</h1><nav></nav><div class="who"></div></header>
+<main class="page">
+  <section class="card auth">
+    <h2>เข้าสู่ระบบ</h2>
+    <p class="sub">เข้าสู่ระบบเพื่อเขียนรีวิวและยืนยันการแก้ปัญหา</p>
+    <form id="form" novalidate>
+      <div class="field"><label for="username">ชื่อผู้ใช้</label>
+        <input id="username" name="username" autocomplete="username" required autofocus></div>
+      <div class="field"><label for="password">รหัสผ่าน</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required></div>
+      <p id="err" class="err" role="alert"></p>
+      <button class="primary" type="submit">เข้าสู่ระบบ</button>
+    </form>
+    <p class="alt">ยังไม่มีบัญชี? <a href="/register.html">สมัครสมาชิก</a></p>
+  </section>
+</main>
+<script src="/auth.js"></script>
+<script>renderHeader(); setupAuthForm("/auth/login");</script>
+</body>
+</html>
