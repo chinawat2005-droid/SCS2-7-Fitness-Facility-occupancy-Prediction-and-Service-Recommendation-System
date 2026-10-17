@@ -1,0 +1,301 @@
+﻿review_id,text,sentiment,aspects,rating,source
+1,สะอาดมาก ชอบมาก,pos,cleanliness,4,synthetic
+2,พนักงานไม่สนใจลูกค้า ไม่มาอีกแล้ว,neg,staff,1,synthetic
+3,แจ้งปัญหาไปก็ไม่มีใครแก้ แต่เครื่องวิ่งใหม่เอี่ยม,neu,equipment;service,3,synthetic
+4,ระบบจองคิวค้างบ่อย อีกทั้งร้อนอบอ้าวมาก ไม่แนะนำ!!,neg,air_conditioning;service,1,synthetic
+5,มีที่จอดรถพอใช้ แต่ว่าเทรนเนอร์เอาแต่เล่นมือถือ ผิดหวังมาก จริงๆ,neg,staff;service,1,synthetic
+6,มีที่จอดรถพอใช้ ส่วนพนักงานพูดจาไม่ดี ไม่มาอีกแล้ว,neg,staff;service,1,synthetic
+7,เทรนเนอร์มีให้จ้างแยก แต่ว่าเครื่องเวทน้อยเกินไป ส่วนช่วงเย็นคนเริ่มเยอะ!,neg,equipment;staff;crowding,1,synthetic
+8,พี่ๆ ช่วยดูท่าให้ฟรี แต่ว่าคนเยอะเกินไปแย่งกันใช้เครื่อง และเครื่องเวทน้อยเกินไป ก็ใช้ได้,neu,equipment;staff;crowding,3,synthetic
+9,ห้องอาบน้ำสะอาดน่าใช้ และแอร์เย็นฉ่ำ จะมาอีกแน่นอน!!,pos,cleanliness;air_conditioning,5,synthetic
+10,ค่าสมาชิกไม่แพง ส่วนที่จอดรถไม่พอ,neu,service;price,3,synthetic
+11,ไม่ต้องรอเครื่อง,pos,crowding,5,synthetic
+12,เทรนเนอร์เอาแต่เล่นมือถือ จริงๆ,neg,staff,2,synthetic
+13,โปรโมชั่นดีมาก และคนไม่เยอะสบายมาก บริการดีมีน้ำดื่มฟรี!,pos,service;crowding;price,4,synthetic
+14,เครื่องวิ่งใหม่เอี่ยม ชอบมาก,pos,equipment,4,synthetic
+15,ที่จอดรถไม่พอ แต่พนักงานก็ปกติ แต่ว่าเครื่องเหงื่อเกรอะไม่มีใครเช็ด เสียดายเงิน,neg,cleanliness;staff;service,1,synthetic
+16,คนเยอะเกินไปแย่งกันใช้เครื่อง ร้อนอบอ้าวมาก!!,neg,air_conditioning;crowding,1,synthetic
+17,เครื่องครบทุกส่วน ส่วนไม่มีผ้าเช็ดตัวให้,neu,equipment;service,3,synthetic
+18,ราคาถูกคุ้มมาก มีผ้าเช็ดตัวให้,pos,service;price,4,synthetic
+19,อุปกรณ์ก็แบบทั่วไป เฉยๆ จริงๆ,neu,equipment,3,synthetic
+20,คนมีบ้างบางช่วง แต่แอร์เย็นฉ่ำ ประทับใจ,pos,air_conditioning;crowding,5,synthetic
+21,คนมีบ้างบางช่วง แต่ว่าอากาศถ่ายเทดี!,pos,air_conditioning;crowding,4,synthetic
+22,อุณหภูมิก็ปานกลาง และอุปกรณ์ก็แบบทั่วไป,neu,equipment;air_conditioning,3,synthetic
+23,เครื่องมีให้เลือกพอสมควร และห้องน้ำโอเคตามมาตรฐาน แต่ระบบจองใช้ง่าย ชอบมาก!!,pos,equipment;cleanliness;service,4,synthetic
+24,พื้นสะอาดเช็ดเครื่องทุกชั่วโมง และโปรโมชั่นดีมาก และอุปกรณ์ใหม่สภาพดีมาก ประทับใจ!,pos,equipment;cleanliness;price,5,synthetic
+25,ระบบจองใช้ง่าย ส่วนราคาแพงเกินไป,neu,service;price,3,synthetic
+26,คนเยอะเกินไปแย่งกันใช้เครื่อง ส่วนเครื่องวิ่งใหม่เอี่ยม เฉยๆ!!,neu,equipment;crowding,3,synthetic
+27,เครื่องมีให้เลือกพอสมควร เฉยๆ เลย,neu,equipment,3,synthetic
+28,แจ้งปัญหาไปก็ไม่มีใครแก้!,neg,service,1,synthetic
+29,อุณหภูมิก็ปานกลาง แต่มีผ้าเช็ดตัวให้ จะมาอีกแน่นอน,pos,air_conditioning;service,4,synthetic
+30,ห้องน้ำสะอาดไม่มีกลิ่น อีกทั้งช่วงเช้าเงียบดี,pos,cleanliness;crowding,5,synthetic
+31,ห้องน้ำสะอาดไม่มีกลิ่น แต่คนเยอะเกินไปแย่งกันใช้เครื่อง แต่ว่าเครื่องมีให้เลือกพอสมควร ก็ใช้ได้,neu,equipment;cleanliness;crowding,3,synthetic
+32,อากาศถ่ายเทดี ชอบมาก!,pos,air_conditioning,5,synthetic
+33,เครื่องมีทั้งคาร์ดิโอกับเวท ราคาพอๆ กับที่อื่น เฉยๆ,neu,equipment;price,3,synthetic
+34,คนเยอะเกินไปแย่งกันใช้เครื่อง อีกทั้งอากาศอึดอัดไม่ถ่ายเท,neg,air_conditioning;crowding,1,synthetic
+35,ความสะอาดก็ปกติ ส่วนพนักงานน่ารักมาก,pos,cleanliness;staff,4,synthetic
+36,เครื่องเวทน้อยเกินไป!,neg,equipment,1,synthetic
+37,คนไม่เยอะสบายมาก,pos,crowding,4,synthetic
+38,ร้อนอบอ้าวมาก ผิดหวังมาก,neg,air_conditioning,1,synthetic
+39,เครื่องวิ่งพังหลายเครื่อง ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ แต่ช่วงเช้าเงียบดี!,neu,equipment;crowding;price,3,synthetic
+40,แอร์เย็นพอใช้ แต่ว่าไม่ต้องรอเครื่อง แต่ความสะอาดก็ปกติ ประทับใจ!,pos,cleanliness;air_conditioning;crowding,4,synthetic
+41,โปรโมชั่นดีมาก,pos,price,4,synthetic
+42,ห้องอาบน้ำสะอาดน่าใช้ ประทับใจ,pos,cleanliness,5,synthetic
+43,แอร์เย็นฉ่ำ จะมาอีกแน่นอน,pos,air_conditioning,5,synthetic
+44,พื้นเปียกลื่นไม่มีคนเช็ด แต่ราคาถูกคุ้มมาก เฉยๆ!,neu,cleanliness;price,3,synthetic
+45,ห้องน้ำสะอาดไม่มีกลิ่น จริงๆ,pos,cleanliness,5,synthetic
+46,เทรนเนอร์ใจดีแนะนำดี แต่เครื่องเหงื่อเกรอะไม่มีใครเช็ด เลย,neu,cleanliness;staff,3,synthetic
+47,แจ้งปัญหาไปก็ไม่มีใครแก้ ช่วงเย็นคนแน่นมาก เสียดายเงิน,neg,service;crowding,2,synthetic
+48,ต้องรอเครื่องนานมาก และเครื่องเสียบ่อยมาก ไม่แนะนำ จริงๆ,neg,equipment;crowding,1,synthetic
+49,พนักงานก็ปกติ อีกทั้งแอร์เย็นพอใช้ ไม่ดีไม่แย่!,neu,air_conditioning;staff,3,synthetic
+50,คนไม่เยอะสบายมาก จริงๆ,pos,crowding,4,synthetic
+51,ร้อนอบอ้าวมาก ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ เสียดายเงิน จริงๆ,neg,air_conditioning;price,1,synthetic
+52,อากาศอึดอัดไม่ถ่ายเท คนเยอะเกินไปแย่งกันใช้เครื่อง ไม่แนะนำ!,neg,air_conditioning;crowding,2,synthetic
+53,ราคาพอๆ กับที่อื่น แต่ว่าแจ้งปัญหาไปก็ไม่มีใครแก้,neg,service;price,1,synthetic
+54,เปิดปิดตรงเวลา ประทับใจ,pos,service,5,synthetic
+55,พี่ๆ ช่วยดูท่าให้ฟรี อีกทั้งค่าสมาชิกไม่แพง แนะนำเลย!,pos,staff;price,5,synthetic
+56,ค่าสมาชิกไม่แพง เลย,pos,price,5,synthetic
+57,ห้องน้ำโอเคตามมาตรฐาน แต่ว่าช่วงเช้าเงียบดี ดัมเบลล์น้ำหนักครบ เลย,pos,equipment;cleanliness;crowding,5,synthetic
+58,อุปกรณ์ก็แบบทั่วไป,neu,equipment,3,synthetic
+59,อุณหภูมิก็ปานกลาง ห้องน้ำโอเคตามมาตรฐาน!!,neu,cleanliness;air_conditioning,3,synthetic
+60,คนเยอะเกินไปแย่งกันใช้เครื่อง จริงๆ,neg,crowding,2,synthetic
+61,มีผ้าเช็ดตัวให้ ประทับใจ,pos,service,5,synthetic
+62,ห้องน้ำสกปรกมาก ร้อนอบอ้าวมาก ไม่มาอีกแล้ว!!,neg,cleanliness;air_conditioning,2,synthetic
+63,ค่าสมาชิกไม่แพง อีกทั้งพนักงานน่ารักมาก และคนไม่เยอะสบายมาก แนะนำเลย,pos,staff;crowding;price,5,synthetic
+64,บริการดีมีน้ำดื่มฟรี และพื้นสะอาดเช็ดเครื่องทุกชั่วโมง,pos,cleanliness;service,4,synthetic
+65,ห้องอาบน้ำสะอาดน่าใช้ ประทับใจ เลย,pos,cleanliness,4,synthetic
+66,ช่วงเย็นคนเริ่มเยอะ!,neu,crowding,3,synthetic
+67,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้,neg,price,1,synthetic
+68,บริการก็มาตรฐาน จริงๆ,neu,service,3,synthetic
+69,เครื่องมีทั้งคาร์ดิโอกับเวท ส่วนโปรโมชั่นดีมาก แนะนำเลย จริงๆ,pos,equipment;price,5,synthetic
+70,เครื่องวิ่งใหม่เอี่ยม แต่ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ ไม่ดีไม่แย่,neu,equipment;price,3,synthetic
+71,อากาศอึดอัดไม่ถ่ายเท ส่วนโปรโมชั่นดีมาก และสะอาดมาก ก็ใช้ได้ จริงๆ,neu,cleanliness;air_conditioning;price,3,synthetic
+72,ต้องรอเครื่องนานมาก ไม่แนะนำ จริงๆ,neg,crowding,2,synthetic
+73,พนักงานต้อนรับดียิ้มแย้ม!!,pos,staff,4,synthetic
+74,ห้องน้ำโอเคตามมาตรฐาน แต่แอร์เย็นสบายตลอด,pos,cleanliness;air_conditioning,4,synthetic
+75,มีกลิ่นอับทั้งห้อง และพนักงานพูดจาไม่ดี ผิดหวังมาก!,neg,cleanliness;staff,1,synthetic
+76,เทรนเนอร์มีให้จ้างแยก,neu,staff,3,synthetic
+77,ช่วงเย็นคนเริ่มเยอะ ไม่ดีไม่แย่ จริงๆ,neu,crowding,3,synthetic
+78,พนักงานน่ารักมาก อีกทั้งห้องน้ำสะอาดไม่มีกลิ่น และดัมเบลล์น้ำหนักครบ,pos,equipment;cleanliness;staff,5,synthetic
+79,พี่ๆ ช่วยดูท่าให้ฟรี ประทับใจ จริงๆ,pos,staff,5,synthetic
+80,ความสะอาดก็ปกติ แต่ว่าคนไม่เยอะสบายมาก,pos,cleanliness;crowding,5,synthetic
+81,บริการดีมีน้ำดื่มฟรี และอากาศถ่ายเทดี,pos,air_conditioning;service,5,synthetic
+82,ขึ้นราคาบ่อยไม่คุ้ม,neg,price,1,synthetic
+83,ห้องน้ำโอเคตามมาตรฐาน และอุปกรณ์ก็แบบทั่วไป แต่ว่าแอร์ไม่เย็นเลย!,neg,equipment;cleanliness;air_conditioning,1,synthetic
+84,ช่วงเย็นคนแน่นมาก และเครื่องเสียบ่อยมาก,neg,equipment;crowding,1,synthetic
+85,เทรนเนอร์มีให้จ้างแยก เฉยๆ!,neu,staff,3,synthetic
+86,ราคาพอๆ กับที่อื่น และช่วงเย็นคนเริ่มเยอะ,neu,crowding;price,3,synthetic
+87,ห้องน้ำสะอาดไม่มีกลิ่น แนะนำเลย,pos,cleanliness,4,synthetic
+88,มีกลิ่นอับทั้งห้อง,neg,cleanliness,1,synthetic
+89,พนักงานก็ปกติ,neu,staff,3,synthetic
+90,ราคาพอๆ กับที่อื่น แต่คนไม่เยอะสบายมาก แนะนำเลย,pos,crowding;price,4,synthetic
+91,ช่วงเย็นคนแน่นมาก เลย,neg,crowding,2,synthetic
+92,ห้องอาบน้ำสะอาดน่าใช้ อีกทั้งมีผ้าเช็ดตัวให้ ชอบมาก เลย,pos,cleanliness;service,5,synthetic
+93,เครื่องเวทเยอะดี แต่ว่าคนเยอะเกินไปแย่งกันใช้เครื่อง เฉยๆ,neu,equipment;crowding,3,synthetic
+94,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ แต่แอร์เย็นฉ่ำ เฉยๆ!,neu,air_conditioning;price,3,synthetic
+95,แอร์เย็นพอใช้ ส่วนเทรนเนอร์ใจดีแนะนำดี!,pos,air_conditioning;staff,4,synthetic
+96,ห้องน้ำสะอาดไม่มีกลิ่น ราคาถูกคุ้มมาก แนะนำเลย,pos,cleanliness;price,4,synthetic
+97,พนักงานไม่สนใจลูกค้า อีกทั้งร้อนอบอ้าวมาก ส่วนเครื่องเวทเยอะดี,neu,equipment;air_conditioning;staff,3,synthetic
+98,อุปกรณ์ก็แบบทั่วไป แต่เทรนเนอร์ใจดีแนะนำดี แนะนำเลย,pos,equipment;staff,4,synthetic
+99,ไม่มีผ้าเช็ดตัวให้,neg,service,2,synthetic
+100,อากาศอึดอัดไม่ถ่ายเท ไม่แนะนำ!!,neg,air_conditioning,2,synthetic
+101,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ เลย,neg,price,2,synthetic
+102,พื้นสะอาดเช็ดเครื่องทุกชั่วโมง จะมาอีกแน่นอน!!,pos,cleanliness,4,synthetic
+103,เครื่องครบทุกส่วน แต่คนเยอะเกินไปแย่งกันใช้เครื่อง จริงๆ,neu,equipment;crowding,3,synthetic
+104,ระบบจองใช้ง่าย ส่วนคนมีบ้างบางช่วง แต่เครื่องเวทน้อยเกินไป,neu,equipment;service;crowding,3,synthetic
+105,อากาศถ่ายเทดี แต่ว่าพนักงานก็ปกติ แต่ว่าพื้นเปียกลื่นไม่มีคนเช็ด เฉยๆ!,neu,cleanliness;air_conditioning;staff,3,synthetic
+106,พนักงานก็ปกติ ส่วนพื้นสะอาดเช็ดเครื่องทุกชั่วโมง!,pos,cleanliness;staff,4,synthetic
+107,ไม่ต้องรอเครื่อง แต่ว่าพนักงานก็ปกติ แต่ว่าร้อนอบอ้าวมาก ไม่ดีไม่แย่,neu,air_conditioning;staff;crowding,3,synthetic
+108,ขึ้นราคาบ่อยไม่คุ้ม จริงๆ,neg,price,1,synthetic
+109,อากาศอึดอัดไม่ถ่ายเท เสียดายเงิน,neg,air_conditioning,2,synthetic
+110,คนไม่เยอะสบายมาก ประทับใจ,pos,crowding,4,synthetic
+111,พนักงานต้อนรับดียิ้มแย้ม อีกทั้งมีผ้าเช็ดตัวให้ ชอบมาก เลย,pos,staff;service,4,synthetic
+112,ดัมเบลล์น้ำหนักครบ แต่ว่าต้องรอเครื่องนานมาก,neu,equipment;crowding,3,synthetic
+113,ระบบจองคิวค้างบ่อย แต่คนไม่เยอะสบายมาก!,neu,service;crowding,3,synthetic
+114,ที่จอดรถไม่พอ,neg,service,1,synthetic
+115,เครื่องมีให้เลือกพอสมควร จริงๆ,neu,equipment,3,synthetic
+116,คนไม่เยอะสบายมาก แต่พนักงานพูดจาไม่ดี ไม่ดีไม่แย่,neu,staff;crowding,3,synthetic
+117,ช่วงเช้าเงียบดี แต่ว่าแอร์เสียบ่อย อีกทั้งอุปกรณ์เก่าสนิมขึ้น ไม่ดีไม่แย่,neu,equipment;air_conditioning;crowding,3,synthetic
+118,ราคาพอๆ กับที่อื่น แต่ว่าคนเยอะเกินไปแย่งกันใช้เครื่อง แต่ห้องอาบน้ำสะอาดน่าใช้ จริงๆ,neu,cleanliness;crowding;price,3,synthetic
+119,คนมีบ้างบางช่วง ส่วนเครื่องเวทน้อยเกินไป!,neg,equipment;crowding,1,synthetic
+120,เครื่องวิ่งใหม่เอี่ยม,pos,equipment,4,synthetic
+121,ห้องน้ำสกปรกมาก จริงๆ,neg,cleanliness,1,synthetic
+122,ราคากลางๆ อีกทั้งอุณหภูมิก็ปานกลาง ความสะอาดก็ปกติ เฉยๆ,neu,cleanliness;air_conditioning;price,3,synthetic
+123,คนไม่เยอะสบายมาก อีกทั้งราคาถูกคุ้มมาก ประทับใจ!,pos,crowding;price,5,synthetic
+124,แอร์เย็นสบายตลอด เลย,pos,air_conditioning,5,synthetic
+125,เครื่องครบทุกส่วน แต่ว่าพนักงานตอบช้าและหน้าบึ้ง!!,neu,equipment;staff,3,synthetic
+126,แอร์เสียบ่อย ห้องน้ำสกปรกมาก ไม่แนะนำ!,neg,cleanliness;air_conditioning,2,synthetic
+127,ค่าสมาชิกไม่แพง แต่บริการก็มาตรฐาน ชอบมาก จริงๆ,pos,service;price,4,synthetic
+128,ช่วงเย็นคนเริ่มเยอะ แต่ที่จอดรถไม่พอ จริงๆ,neg,service;crowding,2,synthetic
+129,อุปกรณ์ใหม่สภาพดีมาก แต่ว่าร้อนอบอ้าวมาก และมีกลิ่นอับทั้งห้อง เลย,neu,equipment;cleanliness;air_conditioning,3,synthetic
+130,มีที่จอดรถพอใช้ แต่เครื่องเหงื่อเกรอะไม่มีใครเช็ด เสียดายเงิน!!,neg,cleanliness;service,1,synthetic
+131,คนมีบ้างบางช่วง,neu,crowding,3,synthetic
+132,ห้องน้ำสะอาดไม่มีกลิ่น แต่ต้องรอเครื่องนานมาก,neu,cleanliness;crowding,3,synthetic
+133,ดัมเบลล์น้ำหนักครบ และพื้นสะอาดเช็ดเครื่องทุกชั่วโมง พนักงานน่ารักมาก,pos,equipment;cleanliness;staff,5,synthetic
+134,พนักงานต้อนรับดียิ้มแย้ม แต่ว่าเครื่องมีทั้งคาร์ดิโอกับเวท แต่ต้องรอเครื่องนานมาก!,neu,equipment;staff;crowding,3,synthetic
+135,พนักงานไม่สนใจลูกค้า อีกทั้งช่วงเย็นคนแน่นมาก ส่วนบริการก็มาตรฐาน เสียดายเงิน,neg,staff;service;crowding,2,synthetic
+136,พนักงานไม่สนใจลูกค้า ไม่มาอีกแล้ว!,neg,staff,1,synthetic
+137,พนักงานไม่สนใจลูกค้า ส่วนมีที่จอดรถพอใช้!,neg,staff;service,1,synthetic
+138,ระบบจองใช้ง่าย,pos,service,5,synthetic
+139,ไม่มีผ้าเช็ดตัวให้ แต่ว่าเครื่องมีให้เลือกพอสมควร,neg,equipment;service,2,synthetic
+140,เครื่องมีทั้งคาร์ดิโอกับเวท แต่ว่าไม่ต้องรอเครื่อง ชอบมาก,pos,equipment;crowding,4,synthetic
+141,ต้องรอเครื่องนานมาก ส่วนราคาถูกคุ้มมาก และแอร์เย็นสบายตลอด เฉยๆ เลย,neu,air_conditioning;crowding;price,3,synthetic
+142,เปิดปิดตรงเวลา ส่วนช่วงเย็นคนเริ่มเยอะ ประทับใจ เลย,pos,service;crowding,4,synthetic
+143,โปรโมชั่นดีมาก ประทับใจ!,pos,price,4,synthetic
+144,ช่วงเย็นคนเริ่มเยอะ ก็ใช้ได้,neu,crowding,3,synthetic
+145,ต้องรอเครื่องนานมาก แต่ว่าเครื่องครบทุกส่วน ไม่ดีไม่แย่,neu,equipment;crowding,3,synthetic
+146,ดัมเบลล์น้ำหนักครบ แต่ว่าคนมีบ้างบางช่วง เลย,pos,equipment;crowding,4,synthetic
+147,อากาศถ่ายเทดี แต่ห้องน้ำสกปรกมาก!!,neu,cleanliness;air_conditioning,3,synthetic
+148,สะอาดมาก ส่วนบริการก็มาตรฐาน แนะนำเลย เลย,pos,cleanliness;service,4,synthetic
+149,เครื่องวิ่งพังหลายเครื่อง แต่พี่ๆ ช่วยดูท่าให้ฟรี ไม่ดีไม่แย่ เลย,neu,equipment;staff,3,synthetic
+150,พนักงานตอบช้าและหน้าบึ้ง และต้องรอเครื่องนานมาก ไม่แนะนำ,neg,staff;crowding,1,synthetic
+151,เครื่องเวทน้อยเกินไป,neg,equipment,2,synthetic
+152,ห้องน้ำสะอาดไม่มีกลิ่น แต่ว่าเครื่องเสียบ่อยมาก,neu,equipment;cleanliness,3,synthetic
+153,เปิดปิดตรงเวลา อีกทั้งสะอาดมาก,pos,cleanliness;service,5,synthetic
+154,บริการก็มาตรฐาน ส่วนแอร์เย็นสบายตลอด,pos,air_conditioning;service,4,synthetic
+155,ความสะอาดก็ปกติ แต่ว่ามีผ้าเช็ดตัวให้,pos,cleanliness;service,5,synthetic
+156,เครื่องเวทเยอะดี จริงๆ,pos,equipment,4,synthetic
+157,คนเยอะเกินไปแย่งกันใช้เครื่อง ราคาแพงเกินไป ไม่มาอีกแล้ว จริงๆ,neg,crowding;price,1,synthetic
+158,ขึ้นราคาบ่อยไม่คุ้ม แต่ดัมเบลล์น้ำหนักครบ,neu,equipment;price,3,synthetic
+159,สะอาดมาก แต่ว่าพนักงานพูดจาไม่ดี เครื่องวิ่งพังหลายเครื่อง!,neu,equipment;cleanliness;staff,3,synthetic
+160,พนักงานไม่สนใจลูกค้า ไม่มาอีกแล้ว!!,neg,staff,1,synthetic
+161,ห้องน้ำสกปรกมาก อีกทั้งขึ้นราคาบ่อยไม่คุ้ม ไม่แนะนำ,neg,cleanliness;price,1,synthetic
+162,ร้อนอบอ้าวมาก ต้องรอเครื่องนานมาก จริงๆ,neg,air_conditioning;crowding,1,synthetic
+163,เครื่องมีให้เลือกพอสมควร,neu,equipment,3,synthetic
+164,มีผ้าเช็ดตัวให้,pos,service,5,synthetic
+165,ความสะอาดก็ปกติ ส่วนค่าสมาชิกไม่แพง จะมาอีกแน่นอน,pos,cleanliness;price,5,synthetic
+166,มีที่จอดรถพอใช้ จริงๆ,neu,service,3,synthetic
+167,อากาศอึดอัดไม่ถ่ายเท แต่ว่ามีที่จอดรถพอใช้,neg,air_conditioning;service,2,synthetic
+168,แอร์เย็นฉ่ำ และราคาถูกคุ้มมาก เลย,pos,air_conditioning;price,4,synthetic
+169,ค่าสมาชิกไม่แพง ระบบจองใช้ง่าย แต่ว่าพนักงานพูดจาไม่ดี!,neu,staff;service;price,3,synthetic
+170,เครื่องเวทน้อยเกินไป แต่เทรนเนอร์ใจดีแนะนำดี ไม่ดีไม่แย่,neu,equipment;staff,3,synthetic
+171,พื้นสะอาดเช็ดเครื่องทุกชั่วโมง และโปรโมชั่นดีมาก!,pos,cleanliness;price,4,synthetic
+172,พนักงานน่ารักมาก จะมาอีกแน่นอน เลย,pos,staff,4,synthetic
+173,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ แต่ว่าบริการดีมีน้ำดื่มฟรี แต่ว่าพนักงานก็ปกติ เฉยๆ,neu,staff;service;price,3,synthetic
+174,เครื่องวิ่งใหม่เอี่ยม จะมาอีกแน่นอน!,pos,equipment,4,synthetic
+175,ช่วงเช้าเงียบดี อีกทั้งเครื่องเวทเยอะดี แอร์เย็นสบายตลอด,pos,equipment;air_conditioning;crowding,4,synthetic
+176,แอร์เย็นพอใช้,neu,air_conditioning,3,synthetic
+177,ช่วงเย็นคนแน่นมาก แต่ราคากลางๆ ไม่แนะนำ,neg,crowding;price,2,synthetic
+178,เครื่องครบทุกส่วน และพี่ๆ ช่วยดูท่าให้ฟรี จะมาอีกแน่นอน,pos,equipment;staff,4,synthetic
+179,สะอาดมาก ส่วนอุปกรณ์ก็แบบทั่วไป,pos,equipment;cleanliness,5,synthetic
+180,พนักงานตอบช้าและหน้าบึ้ง แต่ดัมเบลล์น้ำหนักครบ แต่ช่วงเย็นคนเริ่มเยอะ เฉยๆ,neu,equipment;staff;crowding,3,synthetic
+181,ห้องน้ำสกปรกมาก แต่ว่าอากาศถ่ายเทดี,neu,cleanliness;air_conditioning,3,synthetic
+182,แอร์เย็นพอใช้ ส่วนเทรนเนอร์ใจดีแนะนำดี เลย,pos,air_conditioning;staff,5,synthetic
+183,ห้องน้ำโอเคตามมาตรฐาน,neu,cleanliness,3,synthetic
+184,ไม่มีผ้าเช็ดตัวให้ แอร์เสียบ่อย ไม่มาอีกแล้ว,neg,air_conditioning;service,1,synthetic
+185,ช่วงเช้าเงียบดี พนักงานต้อนรับดียิ้มแย้ม แต่แอร์ไม่เย็นเลย ไม่ดีไม่แย่!!,neu,air_conditioning;staff;crowding,3,synthetic
+186,แอร์เย็นสบายตลอด แต่ราคาแพงเกินไป ก็ใช้ได้,neu,air_conditioning;price,3,synthetic
+187,ราคากลางๆ ก็ใช้ได้!!,neu,price,3,synthetic
+188,เทรนเนอร์ใจดีแนะนำดี และมีผ้าเช็ดตัวให้,pos,staff;service,5,synthetic
+189,เทรนเนอร์ใจดีแนะนำดี แต่ราคากลางๆ ส่วนระบบจองใช้ง่าย ประทับใจ,pos,staff;service;price,4,synthetic
+190,ต้องรอเครื่องนานมาก ไม่มาอีกแล้ว!!,neg,crowding,2,synthetic
+191,ราคาถูกคุ้มมาก ชอบมาก!,pos,price,5,synthetic
+192,อุปกรณ์เก่าสนิมขึ้น,neg,equipment,1,synthetic
+193,พนักงานน่ารักมาก ส่วนช่วงเย็นคนเริ่มเยอะ!!,pos,staff;crowding,4,synthetic
+194,บาร์เบลมีไม่พอ แต่ว่าอุณหภูมิก็ปานกลาง ส่วนช่วงเย็นคนแน่นมาก ผิดหวังมาก จริงๆ,neg,equipment;air_conditioning;crowding,1,synthetic
+195,ไม่ต้องรอเครื่อง แต่ขึ้นราคาบ่อยไม่คุ้ม ส่วนเครื่องครบทุกส่วน ก็ใช้ได้!,neu,equipment;crowding;price,3,synthetic
+196,เครื่องมีให้เลือกพอสมควร ส่วนค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ เลย,neg,equipment;price,1,synthetic
+197,พื้นสะอาดเช็ดเครื่องทุกชั่วโมง แนะนำเลย!,pos,cleanliness,4,synthetic
+198,พนักงานต้อนรับดียิ้มแย้ม แต่ว่าแจ้งปัญหาไปก็ไม่มีใครแก้ อีกทั้งอากาศอึดอัดไม่ถ่ายเท ไม่ดีไม่แย่,neu,air_conditioning;staff;service,3,synthetic
+199,เทรนเนอร์ใจดีแนะนำดี อีกทั้งอากาศถ่ายเทดี จะมาอีกแน่นอน,pos,air_conditioning;staff,5,synthetic
+200,ห้องน้ำสะอาดไม่มีกลิ่น และแอร์เย็นฉ่ำ แต่บริการก็มาตรฐาน!!,pos,cleanliness;air_conditioning;service,5,synthetic
+201,บริการก็มาตรฐาน ส่วนเทรนเนอร์ใจดีแนะนำดี จริงๆ,pos,staff;service,4,synthetic
+202,แอร์เย็นฉ่ำ เลย,pos,air_conditioning,5,synthetic
+203,ช่วงเช้าเงียบดี ส่วนพนักงานไม่สนใจลูกค้า เฉยๆ,neu,staff;crowding,3,synthetic
+204,ระบบจองคิวค้างบ่อย แต่ว่าห้องน้ำโอเคตามมาตรฐาน,neg,cleanliness;service,2,synthetic
+205,ห้องอาบน้ำสะอาดน่าใช้ อีกทั้งระบบจองใช้ง่าย ประทับใจ,pos,cleanliness;service,4,synthetic
+206,พนักงานก็ปกติ ก็ใช้ได้!!,neu,staff,3,synthetic
+207,ขึ้นราคาบ่อยไม่คุ้ม อีกทั้งอากาศอึดอัดไม่ถ่ายเท แต่ว่ามีที่จอดรถพอใช้ เสียดายเงิน!,neg,air_conditioning;service;price,1,synthetic
+208,เครื่องวิ่งใหม่เอี่ยม ส่วนพนักงานไม่สนใจลูกค้า!,neu,equipment;staff,3,synthetic
+209,บริการดีมีน้ำดื่มฟรี แต่ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ เฉยๆ เลย,neu,service;price,3,synthetic
+210,อากาศอึดอัดไม่ถ่ายเท!!,neg,air_conditioning,1,synthetic
+211,สะอาดมาก แต่ว่าพนักงานพูดจาไม่ดี,neu,cleanliness;staff,3,synthetic
+212,บริการก็มาตรฐาน ส่วนเครื่องครบทุกส่วน,pos,equipment;service,4,synthetic
+213,บริการก็มาตรฐาน อีกทั้งแอร์เย็นพอใช้ เฉยๆ,neu,air_conditioning;service,3,synthetic
+214,เครื่องวิ่งใหม่เอี่ยม จะมาอีกแน่นอน!!,pos,equipment,5,synthetic
+215,ไม่ต้องรอเครื่อง แต่ว่าแจ้งปัญหาไปก็ไม่มีใครแก้ ไม่ดีไม่แย่,neu,service;crowding,3,synthetic
+216,บริการดีมีน้ำดื่มฟรี จะมาอีกแน่นอน!!,pos,service,4,synthetic
+217,สะอาดมาก แนะนำเลย,pos,cleanliness,4,synthetic
+218,ที่จอดรถไม่พอ แต่ห้องน้ำสะอาดไม่มีกลิ่น เฉยๆ,neu,cleanliness;service,3,synthetic
+219,แอร์เย็นสบายตลอด จะมาอีกแน่นอน,pos,air_conditioning,5,synthetic
+220,เทรนเนอร์ใจดีแนะนำดี และแอร์เย็นฉ่ำ และบริการดีมีน้ำดื่มฟรี แนะนำเลย,pos,air_conditioning;staff;service,4,synthetic
+221,บริการก็มาตรฐาน!,neu,service,3,synthetic
+222,เครื่องเหงื่อเกรอะไม่มีใครเช็ด!!,neg,cleanliness,2,synthetic
+223,มีที่จอดรถพอใช้ ส่วนเครื่องเหงื่อเกรอะไม่มีใครเช็ด ส่วนช่วงเย็นคนเริ่มเยอะ!,neg,cleanliness;service;crowding,1,synthetic
+224,เครื่องเวทเยอะดี แต่คนมีบ้างบางช่วง แต่ว่าระบบจองคิวค้างบ่อย เฉยๆ จริงๆ,neu,equipment;service;crowding,3,synthetic
+225,พนักงานก็ปกติ และคนมีบ้างบางช่วง ไม่ดีไม่แย่ เลย,neu,staff;crowding,3,synthetic
+226,ช่วงเย็นคนแน่นมาก!,neg,crowding,1,synthetic
+227,เครื่องวิ่งใหม่เอี่ยม จริงๆ,pos,equipment,4,synthetic
+228,พื้นเปียกลื่นไม่มีคนเช็ด ไม่แนะนำ!!,neg,cleanliness,1,synthetic
+229,เครื่องเหงื่อเกรอะไม่มีใครเช็ด อีกทั้งไม่มีผ้าเช็ดตัวให้,neg,cleanliness;service,1,synthetic
+230,มีที่จอดรถพอใช้ แต่ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ ส่วนเครื่องครบทุกส่วน ไม่ดีไม่แย่!,neu,equipment;service;price,3,synthetic
+231,อากาศอึดอัดไม่ถ่ายเท ส่วนพนักงานน่ารักมาก,neu,air_conditioning;staff,3,synthetic
+232,ห้องน้ำโอเคตามมาตรฐาน เครื่องมีให้เลือกพอสมควร ไม่ดีไม่แย่,neu,equipment;cleanliness,3,synthetic
+233,มีกลิ่นอับทั้งห้อง ส่วนอากาศถ่ายเทดี และช่วงเช้าเงียบดี ไม่ดีไม่แย่,neu,cleanliness;air_conditioning;crowding,3,synthetic
+234,ไม่ต้องรอเครื่อง แนะนำเลย!!,pos,crowding,4,synthetic
+235,อุปกรณ์เก่าสนิมขึ้น ส่วนมีที่จอดรถพอใช้!,neg,equipment;service,1,synthetic
+236,เครื่องเวทน้อยเกินไป แต่ว่าแอร์เย็นฉ่ำ ก็ใช้ได้!,neu,equipment;air_conditioning,3,synthetic
+237,เทรนเนอร์เอาแต่เล่นมือถือ ไม่แนะนำ,neg,staff,2,synthetic
+238,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้ แต่พี่ๆ ช่วยดูท่าให้ฟรี แต่ว่าเครื่องวิ่งพังหลายเครื่อง ไม่ดีไม่แย่,neu,equipment;staff;price,3,synthetic
+239,คนมีบ้างบางช่วง แต่ร้อนอบอ้าวมาก ส่วนบริการดีมีน้ำดื่มฟรี ก็ใช้ได้ เลย,neu,air_conditioning;service;crowding,3,synthetic
+240,คนเยอะเกินไปแย่งกันใช้เครื่อง เสียดายเงิน จริงๆ,neg,crowding,2,synthetic
+241,ราคาถูกคุ้มมาก ประทับใจ เลย,pos,price,5,synthetic
+242,เครื่องวิ่งพังหลายเครื่อง,neg,equipment,2,synthetic
+243,มีกลิ่นอับทั้งห้อง อีกทั้งร้อนอบอ้าวมาก ไม่มาอีกแล้ว จริงๆ,neg,cleanliness;air_conditioning,1,synthetic
+244,โปรโมชั่นดีมาก ส่วนพนักงานตอบช้าและหน้าบึ้ง แต่ไม่ต้องรอเครื่อง เฉยๆ!!,neu,staff;crowding;price,3,synthetic
+245,ค่าสมาชิกแพงเมื่อเทียบกับของที่ได้!,neg,price,2,synthetic
+246,เทรนเนอร์มีให้จ้างแยก อีกทั้งบริการก็มาตรฐาน,neu,staff;service,3,synthetic
+247,เทรนเนอร์เอาแต่เล่นมือถือ และแอร์ไม่เย็นเลย,neg,air_conditioning;staff,1,synthetic
+248,มีผ้าเช็ดตัวให้ แนะนำเลย!!,pos,service,5,synthetic
+249,ห้องน้ำสะอาดไม่มีกลิ่น,pos,cleanliness,4,synthetic
+250,มีกลิ่นอับทั้งห้อง อีกทั้งที่จอดรถไม่พอ ไม่แนะนำ จริงๆ,neg,cleanliness;service,2,synthetic
+251,โปรโมชั่นดีมาก ส่วนพนักงานพูดจาไม่ดี จริงๆ,neu,staff;price,3,synthetic
+252,พี่ๆ ช่วยดูท่าให้ฟรี แต่บริการก็มาตรฐาน ชอบมาก!,pos,staff;service,4,synthetic
+253,อุปกรณ์เก่าสนิมขึ้น ไม่แนะนำ จริงๆ,neg,equipment,2,synthetic
+254,อุปกรณ์เก่าสนิมขึ้น แต่ว่ามีที่จอดรถพอใช้ อีกทั้งความสะอาดก็ปกติ,neg,equipment;cleanliness;service,2,synthetic
+255,ไม่มีผ้าเช็ดตัวให้ แต่แอร์เย็นสบายตลอด เลย,neu,air_conditioning;service,3,synthetic
+256,ช่วงเช้าเงียบดี แต่ว่าห้องน้ำสกปรกมาก แต่แอร์เย็นสบายตลอด ก็ใช้ได้,neu,cleanliness;air_conditioning;crowding,3,synthetic
+257,ต้องรอเครื่องนานมาก แต่ว่าพนักงานน่ารักมาก แต่ห้องน้ำโอเคตามมาตรฐาน!,neu,cleanliness;staff;crowding,3,synthetic
+258,เครื่องวิ่งใหม่เอี่ยม แต่ว่าราคาพอๆ กับที่อื่น จริงๆ,pos,equipment;price,5,synthetic
+259,ไม่มีผ้าเช็ดตัวให้ ผิดหวังมาก,neg,service,1,synthetic
+260,ค่าสมาชิกไม่แพง จะมาอีกแน่นอน!,pos,price,5,synthetic
+261,แจ้งปัญหาไปก็ไม่มีใครแก้ ไม่มาอีกแล้ว!!,neg,service,1,synthetic
+262,พื้นสะอาดเช็ดเครื่องทุกชั่วโมง และอากาศถ่ายเทดี!!,pos,cleanliness;air_conditioning,4,synthetic
+263,ราคาพอๆ กับที่อื่น แต่ว่าอุปกรณ์เก่าสนิมขึ้น ห้องน้ำสกปรกมาก เสียดายเงิน จริงๆ,neg,equipment;cleanliness;price,1,synthetic
+264,ไม่มีผ้าเช็ดตัวให้ เสียดายเงิน จริงๆ,neg,service,2,synthetic
+265,ความสะอาดก็ปกติ แต่โปรโมชั่นดีมาก จะมาอีกแน่นอน!,pos,cleanliness;price,5,synthetic
+266,พื้นเปียกลื่นไม่มีคนเช็ด แต่แอร์เย็นฉ่ำ,neu,cleanliness;air_conditioning,3,synthetic
+267,พนักงานก็ปกติ แต่ว่าแอร์เสียบ่อย,neg,air_conditioning;staff,1,synthetic
+268,คนไม่เยอะสบายมาก และแอร์เย็นสบายตลอด ประทับใจ เลย,pos,air_conditioning;crowding,4,synthetic
+269,แอร์ไม่เย็นเลย,neg,air_conditioning,2,synthetic
+270,ไม่ต้องรอเครื่อง ประทับใจ,pos,crowding,4,synthetic
+271,บาร์เบลมีไม่พอ แต่ว่าช่วงเย็นคนเริ่มเยอะ เลย,neg,equipment;crowding,1,synthetic
+272,เปิดปิดตรงเวลา แต่ช่วงเย็นคนแน่นมาก ร้อนอบอ้าวมาก ไม่ดีไม่แย่ เลย,neu,air_conditioning;service;crowding,3,synthetic
+273,พนักงานไม่สนใจลูกค้า อีกทั้งแอร์เสียบ่อย เสียดายเงิน เลย,neg,air_conditioning;staff,1,synthetic
+274,อุณหภูมิก็ปานกลาง อีกทั้งช่วงเย็นคนเริ่มเยอะ ไม่ดีไม่แย่,neu,air_conditioning;crowding,3,synthetic
+275,พนักงานต้อนรับดียิ้มแย้ม แนะนำเลย!,pos,staff,4,synthetic
+276,อุปกรณ์เก่าสนิมขึ้น แต่ว่าโปรโมชั่นดีมาก เฉยๆ,neu,equipment;price,3,synthetic
+277,ไม่ต้องรอเครื่อง ประทับใจ เลย,pos,crowding,5,synthetic
+278,ราคากลางๆ,neu,price,3,synthetic
+279,แอร์เย็นสบายตลอด อีกทั้งอุปกรณ์ใหม่สภาพดีมาก ชอบมาก,pos,equipment;air_conditioning,5,synthetic
+280,ห้องอาบน้ำสะอาดน่าใช้,pos,cleanliness,5,synthetic
+281,ราคากลางๆ และห้องน้ำโอเคตามมาตรฐาน แต่พนักงานต้อนรับดียิ้มแย้ม แนะนำเลย,pos,cleanliness;staff;price,5,synthetic
+282,เครื่องมีทั้งคาร์ดิโอกับเวท จริงๆ,neu,equipment,3,synthetic
+283,ค่าสมาชิกไม่แพง ส่วนพนักงานก็ปกติ,pos,staff;price,4,synthetic
+284,สะอาดมาก และเปิดปิดตรงเวลา ส่วนอากาศอึดอัดไม่ถ่ายเท,neu,cleanliness;air_conditioning;service,3,synthetic
+285,คนไม่เยอะสบายมาก ส่วนเครื่องวิ่งพังหลายเครื่อง จริงๆ,neu,equipment;crowding,3,synthetic
+286,แอร์เย็นสบายตลอด แต่อุปกรณ์เก่าสนิมขึ้น แต่ช่วงเช้าเงียบดี จริงๆ,neu,equipment;air_conditioning;crowding,3,synthetic
+287,เครื่องมีทั้งคาร์ดิโอกับเวท อีกทั้งแอร์เย็นพอใช้ เฉยๆ,neu,equipment;air_conditioning,3,synthetic
+288,เครื่องครบทุกส่วน ประทับใจ,pos,equipment,4,synthetic
+289,คนเยอะเกินไปแย่งกันใช้เครื่อง และเทรนเนอร์เอาแต่เล่นมือถือ เสียดายเงิน!!,neg,staff;crowding,2,synthetic
+290,พนักงานก็ปกติ อีกทั้งราคาพอๆ กับที่อื่น ส่วนคนเยอะเกินไปแย่งกันใช้เครื่อง,neg,staff;crowding;price,1,synthetic
+291,บริการก็มาตรฐาน ไม่ดีไม่แย่,neu,service,3,synthetic
+292,ที่จอดรถไม่พอ อีกทั้งเครื่องเวทน้อยเกินไป!,neg,equipment;service,2,synthetic
+293,เครื่องวิ่งใหม่เอี่ยม ประทับใจ,pos,equipment,4,synthetic
+294,ขึ้นราคาบ่อยไม่คุ้ม ไม่มาอีกแล้ว!!,neg,price,1,synthetic
+295,ขึ้นราคาบ่อยไม่คุ้ม ผิดหวังมาก เลย,neg,price,1,synthetic
+296,ห้องน้ำสกปรกมาก และต้องรอเครื่องนานมาก ไม่มาอีกแล้ว,neg,cleanliness;crowding,1,synthetic
+297,พนักงานต้อนรับดียิ้มแย้ม แต่ว่าเครื่องเสียบ่อยมาก ก็ใช้ได้!,neu,equipment;staff,3,synthetic
+298,คนมีบ้างบางช่วง แต่ว่าห้องอาบน้ำสะอาดน่าใช้,pos,cleanliness;crowding,5,synthetic
+299,แอร์เสียบ่อย แต่เครื่องวิ่งใหม่เอี่ยม ไม่ดีไม่แย่!!,neu,equipment;air_conditioning,3,synthetic
+300,แอร์เย็นพอใช้!,neu,air_conditioning,3,synthetic
