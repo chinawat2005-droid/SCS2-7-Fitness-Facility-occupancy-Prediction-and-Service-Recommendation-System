@@ -25,6 +25,7 @@ from pydantic import BaseModel
 
 from ml.current import forecast_now
 from ml.forecast import forecast_day
+from ml.recommend import recommend
 
 
 class HourForecast(BaseModel):
@@ -51,6 +52,28 @@ class NowResponse(BaseModel):
     predicted_count: int
     predicted_pct: float
     level: str  # low / medium / high / closed
+
+class RecommendRequest(BaseModel):
+    lat: float
+    lng: float
+    date: str | None = None          # YYYY-MM-DD (ไม่ส่ง = วันนี้)
+    hour: int | None = None          # 0-23 (ไม่ส่ง = ชั่วโมงนี้)
+    need_equipment: list[str] = []
+    prefer_quiet: bool = False
+
+
+class RecommendItem(BaseModel):
+    gym_id: int
+    name: str
+    score: float
+    distance_km: float
+    predicted_level: str  # low / medium / high / closed
+    best_hours: list[int]
+    reasons: list[str]
+
+
+class RecommendResponse(BaseModel):
+    results: list[RecommendItem]
 
 
 router = APIRouter()
@@ -80,6 +103,16 @@ def get_now(gym_id: int, at: dt.datetime | None = None):
     except ValueError:
         raise HTTPException(status_code=404, detail=f"ไม่พบ gym_id={gym_id}")
 
+@router.post("/recommend", response_model=RecommendResponse)
+def post_recommend(req: RecommendRequest):
+    """จัดอันดับยิมจากความหนาแน่นที่พยากรณ์ ระยะทาง อุปกรณ์ที่ต้องการ (และคะแนนรีวิวเมื่อมี)"""
+    if req.hour is not None and not 0 <= req.hour <= 23:
+        raise HTTPException(status_code=422, detail="hour ต้องอยู่ระหว่าง 0-23")
+    try:
+        return recommend(req.lat, req.lng, req.date, req.hour,
+                         req.need_equipment, req.prefer_quiet)
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail=NO_MODEL)
 
 # แอปสำหรับทดสอบฝั่ง A เอง (ฝั่ง B ใช้ router ของตัวเองได้)
 app = FastAPI(title="Gym occupancy forecast API (part A)")

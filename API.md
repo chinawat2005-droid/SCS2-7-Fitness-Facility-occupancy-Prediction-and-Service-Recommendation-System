@@ -90,6 +90,9 @@ Response:
     }
   ]
 }
+หมายเหตุ: คะแนนรวมคิดจาก ความหนาแน่นที่พยากรณ์ (0.35) + ระยะทาง (0.30) + อุปกรณ์ที่ต้องการ (0.20) + คะแนนรีวิว (0.15)
+ถ้าไม่มีข้อมูลรีวิว จะตัดปัจจัยนั้นออกแล้วปรับน้ำหนักที่เหลือ `predicted_level` เป็น low / medium / high / closed
+ฝั่ง B เรียกใช้ใน Python ได้: `from ml.recommend import recommend` (ส่ง `ratings={gym_id: avg}` ได้)
 ```
 
 ### 4) GET /gyms/{gym_id}/reviews  — B
