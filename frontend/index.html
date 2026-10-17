@@ -30,6 +30,7 @@ aside{overflow:auto;padding:14px;border-right:1px solid var(--line)}
 .bar{height:6px;border-radius:3px;background:var(--line);margin:10px 0 6px;overflow:hidden}
 .bar i{display:block;height:100%}
 .meta{font-size:.82rem;color:var(--mute);display:flex;justify-content:space-between}
+.lv-closed{color:var(--mute)}.bg-closed{background:var(--mute)}
 .lv-low{color:var(--low)}.lv-medium{color:var(--mid)}.lv-high{color:var(--high)}
 .bg-low{background:var(--low)}.bg-medium{background:var(--mid)}.bg-high{background:var(--high)}
 .detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.9rem;cursor:default}
@@ -56,8 +57,8 @@ aside{overflow:auto;padding:14px;border-right:1px solid var(--line)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const FALLBACK = {lat:16.4745, lng:102.8226, label:"ตำแหน่งสำรอง: มหาวิทยาลัยขอนแก่น"};
-const LEVEL = {low:"คนน้อย", medium:"ปานกลาง", high:"คนแน่น"};
-const COLOR = {low:"#2e9e5b", medium:"#d39a12", high:"#d1453b"};
+const LEVEL = {low:"คนน้อย", medium:"ปานกลาง", high:"คนแน่น", closed:"ปิดอยู่"};
+const COLOR = {low:"#2e9e5b", medium:"#d39a12", high:"#d1453b", closed:"#8a948f"};
 const TH = {free_weights:"ฟรีเวท",machine:"เครื่องเวท",cable:"เคเบิล",treadmill:"ลู่วิ่ง",elliptical:"เครื่องเดินวงรี",
   smith_machine:"สมิทมาชีน",leg_press:"เลกเพรส",rowing:"เครื่องพาย",squat_rack:"แร็คสควอท",
   locker:"ตู้ล็อกเกอร์",shower:"ห้องอาบน้ำ",sauna:"ซาวน่า",parking:"ที่จอดรถ",air_conditioning:"แอร์",towel:"ผ้าเช็ดตัว"};
@@ -104,17 +105,19 @@ async function load(){
   render();
 }
 
+const quietKey = g => g.current_level === "closed" ? 1e9 : (g.current_pct ?? 1e9);
+
 function render(){
   const list = [...gyms].sort((a,b) => sortBy==="dist"
     ? (a.distance_km ?? 1e9) - (b.distance_km ?? 1e9)
-    : (a.current_pct ?? 1e9) - (b.current_pct ?? 1e9));
+    : quietKey(a) - quietKey(b));
   document.getElementById("list").innerHTML = list.map(g => {
     const lv = g.current_level, pct = g.current_pct;
     return `<button class="gym ${g.gym_id===selected?"sel":""}" data-id="${g.gym_id}">
       <div class="row"><span class="name">${esc(g.name)}</span>
         <span class="dist">${g.distance_km!=null ? g.distance_km+" กม." : "-"}</span></div>
       <div class="bar"><i class="bg-${lv}" style="width:${Math.min(pct||0,100)}%"></i></div>
-      <div class="meta"><span class="lv-${lv}">${LEVEL[lv]||"ไม่มีข้อมูล"}${pct!=null?` (${pct}%)`:""}</span>
+      <div class="meta"><span class="lv-${lv}">${LEVEL[lv]||"ไม่มีข้อมูล"}${pct!=null&&lv!=="closed"?` (${pct}%)`:""}</span>
         <span>${g.avg_rating!=null ? "★ "+g.avg_rating : "ยังไม่มีรีวิว"}</span></div>
       ${g.gym_id===selected ? detail(g) : ""}
     </button>`;
