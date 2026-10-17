@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from sqlalchemy import inspect, text
 
 from app.database import engine
+from ml.current import forecast_now
+from ml.forecast_api import router as forecast_router
 
 app = FastAPI(title="Gym Occupancy API")
 
@@ -50,6 +52,15 @@ def list_gyms(lat: Optional[float] = None, lng: Optional[float] = None):
         g["current_pct"] = round(float(cur["occupancy_pct"]), 1) if cur else None
         g["current_level"] = cur["level"] if cur else None
 
+        # ค่า "ตอนนี้" มาจากโมเดลพยากรณ์ ถ้าโมเดลยังไม่พร้อมใช้ค่าจากฐานข้อมูลแทน
+        try:
+            now = forecast_now(g["gym_id"])
+            g["current_count"] = now["predicted_count"]
+            g["current_pct"] = round(now["predicted_pct"], 1)
+            g["current_level"] = now["level"]
+        except Exception:
+            pass
+
         if lat is not None and lng is not None:
             g["distance_km"] = round(haversine_km(lat, lng, g["lat"], g["lng"]), 1)
 
@@ -59,6 +70,8 @@ def list_gyms(lat: Optional[float] = None, lng: Optional[float] = None):
 
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
+
+app.include_router(forecast_router)
 
 app.mount(
     "/",
