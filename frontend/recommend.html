@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แนะนำฟิตเนสและช่วงเวลา</title>
+<link rel="stylesheet" href="/site.css">
+<style>
+.recommend-wrap {
+  max-width: 1050px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+.recommend-card {
+  background: white;
+  color: #172033;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 18px #0000000b;
+}
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+.recommend-field { margin: 12px 0; }
+.recommend-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.recommend-field input,
+.recommend-field select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 11px;
+  font: inherit;
+}
+.recommend-btn {
+  border: none;
+  border-radius: 9px;
+  padding: 12px 18px;
+  background: #0f766e;
+  color: white;
+  cursor: pointer;
+}
+.recommend-btn:disabled { opacity: .6; }
+.equipment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.equipment-list label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.result-score {
+  color: #0f766e;
+  font-size: 24px;
+  font-weight: 700;
+}
+.result-tag {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 6px 10px;
+  border-radius: 7px;
+  margin: 5px 5px 5px 0;
+}
+.recommend-muted { color: #64748b; }
+.recommend-note {
+  background: #fff7ed;
+  border-radius: 9px;
+  padding: 14px;
+  margin-bottom: 18px;
+  color: #9a3412;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style id="recommend-equipment-fix">
+/* จัด Checkbox อุปกรณ์ไม่ให้ทับซ้อนกัน */
+input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 0;
+  accent-color: #0f766e;
+}
+
+#equipmentList,
+#equipment-list,
+#equipment,
+.equipment-options,
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+#equipmentList label,
+#equipment-list label,
+#equipment label,
+.equipment-options label,
+.equipment-grid label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #dde4df;
+  border-radius: 9px;
+  background: white;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+  margin: 0;
+}
+
+#equipmentList label:hover,
+#equipment-list label:hover,
+#equipment label:hover,
+.equipment-options label:hover,
+.equipment-grid label:hover {
+  border-color: #0f766e;
+  background: #f0faf7;
+}
+</style>
+
+
+<style id="recommend-input-height-fix">
+/* ทำให้กรอบวันที่ เวลา และพิกัดมีความสูงเท่ากัน */
+input[type="date"],
+input[type="time"],
+input[type="number"] {
+  height: 54px;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  font: inherit;
+}
+</style>
+
+</head>
+<body>
+
+<header class="site">
+  <div>
+    <h1>Fitness Recommendation</h1>
+    <p>ค้นหาฟิตเนสและช่วงเวลาที่เหมาะกับคุณ</p>
+  </div>
+  <nav></nav>
+  <div class="who"></div>
+</header>
+
+<main class="recommend-wrap">
+  <section class="recommend-card">
+    <h2>ค้นหาฟิตเนสที่เหมาะสม</h2>
+
+    <form id="recommendForm">
+      <div class="recommend-grid">
+        <div class="recommend-field">
+          <label for="date">วันที่ออกกำลังกาย</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="recommend-field">
+          <label for="hour">ช่วงเวลา</label>
+          <select id="hour"></select>
+        </div>
+
+        <div class="recommend-field">
+          <label for="lat">ละติจูด</label>
+          <input type="number" id="lat" step="any"
+                 min="-90" max="90" value="16.47" required>
+        </div>
+
+        <div class="recommend-field">
+          <label for="lng">ลองจิจูด</label>
+          <input type="number" id="lng" step="any"
+                 min="-180" max="180" value="102.82" required>
+        </div>
+      </div>
+
+      <div class="recommend-field">
+        <button type="button" class="recommend-btn"
+                id="gpsButton">ใช้ตำแหน่งปัจจุบัน</button>
+        <span id="gpsStatus" class="recommend-muted"></span>
+      </div>
+
+      <div class="recommend-field">
+        <label>อุปกรณ์ที่ต้องการ</label>
+        <div id="equipmentList" class="equipment-list"></div>
+      </div>
+
+      <div class="recommend-field">
+        <label>
+          <input type="checkbox" id="preferQuiet" checked>
+          ต้องการฟิตเนสที่คนไม่เยอะ
+        </label>
+      </div>
+
+      <button type="submit" class="recommend-btn" id="searchButton">
+        ค้นหาฟิตเนส
+      </button>
+    </form>
+  </section>
+
+  <div class="recommend-note">
+    ระดับความหนาแน่นเป็นค่าพยากรณ์จากโมเดล
+    ไม่ใช่จำนวนผู้ใช้บริการจริง
+  </div>
+
+  <h2>ผลการแนะนำ</h2>
+  <div id="results"></div>
+</main>
+
+<script src="/auth.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+const levels = {
+  low: "คนน้อย",
+  medium: "คนปานกลาง",
+  high: "คนเยอะ",
+  closed: "ปิดให้บริการ"
+};
+
+function addText(parent, tag, textValue, className = "") {
+  const el = document.createElement(tag);
+  el.textContent = textValue;
+  if (className) el.className = className;
+  parent.append(el);
+  return el;
+}
+
+async function loadEquipment() {
+  try {
+    const gyms = await api("/gyms");
+    const equipment = new Set();
+
+    gyms.forEach(gym => {
+      (gym.equipment || []).forEach(item => equipment.add(item));
+    });
+
+    const list = $("equipmentList");
+    list.replaceChildren();
+
+    [...equipment].sort().forEach(item => {
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.name = "equipment";
+      checkbox.value = item;
+      label.append(checkbox, document.createTextNode(item));
+      list.append(label);
+    });
+  } catch (error) {
+    $("equipmentList").textContent =
+      "โหลดอุปกรณ์ไม่สำเร็จ: " + error.message;
+  }
+}
+
+function setupDates() {
+  const now = new Date();
+  const localDate = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+  ).toISOString().slice(0, 10);
+
+  $("date").value = localDate;
+  $("date").min = localDate;
+
+  for (let h = 0; h < 24; h++) {
+    const option = document.createElement("option");
+    option.value = h;
+    option.textContent = String(h).padStart(2, "0") + ":00";
+    $("hour").append(option);
+  }
+  $("hour").value = 18;
+}
+
+$("gpsButton").onclick = () => {
+  if (!navigator.geolocation) {
+    $("gpsStatus").textContent = "อุปกรณ์ไม่รองรับ GPS";
+    return;
+  }
+
+  $("gpsStatus").textContent = "กำลังค้นหาตำแหน่ง...";
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      $("lat").value = position.coords.latitude;
+      $("lng").value = position.coords.longitude;
+      $("gpsStatus").textContent = "ใช้ตำแหน่งปัจจุบันแล้ว";
+    },
+    () => {
+      $("gpsStatus").textContent =
+        "ไม่สามารถใช้ GPS ได้ กรุณากรอกพิกัด";
+    }
+  );
+};
+
+$("recommendForm").onsubmit = async event => {
+  event.preventDefault();
+
+  const button = $("searchButton");
+  const results = $("results");
+  button.disabled = true;
+  results.textContent = "กำลังค้นหา...";
+
+  const equipment = [
+    ...document.querySelectorAll(
+      'input[name="equipment"]:checked'
+    )
+  ].map(input => input.value);
+
+  const requestData = {
+    lat: Number($("lat").value),
+    lng: Number($("lng").value),
+    date: $("date").value,
+    hour: Number($("hour").value),
+    need_equipment: equipment,
+    prefer_quiet: $("preferQuiet").checked
+  };
+
+  try {
+    const data = await api("/recommend", {
+      method: "POST",
+      body: JSON.stringify(requestData)
+    });
+
+    results.replaceChildren();
+
+    const gyms = [...(data.results || [])]
+      .sort((a, b) => b.score - a.score);
+
+    if (!gyms.length) {
+      results.textContent = "ไม่พบฟิตเนสที่เหมาะสม";
+      return;
+    }
+
+    gyms.forEach(gym => {
+      const card = document.createElement("article");
+      card.className = "recommend-card";
+
+      addText(card, "h3", gym.name);
+
+      addText(
+        card, "div",
+        `ความเหมาะสม ${(gym.score * 100).toFixed(0)}%`,
+        "result-score"
+      );
+
+      addText(
+        card, "p",
+        `ระยะทาง ${gym.distance_km ?? "-"} กิโลเมตร`
+      );
+
+      addText(
+        card, "p",
+        "ความหนาแน่นที่คาดการณ์: " +
+        (levels[gym.predicted_level] || "ไม่ทราบ")
+      );
+
+      const hours = (gym.best_hours || [])
+        .map(hour =>
+          String(hour).padStart(2, "0") + ":00"
+        )
+        .join(", ");
+
+      addText(
+        card, "p",
+        "ช่วงเวลาที่เหมาะสม: " + (hours || "ไม่มีข้อมูล")
+      );
+
+      (gym.reasons || []).forEach(reason => {
+        addText(card, "p", "✓ " + reason, "recommend-muted");
+      });
+
+      const link = document.createElement("a");
+      link.href = "/reviews-page?gym_id=" +
+        encodeURIComponent(gym.gym_id);
+      link.textContent = "ดูรีวิวฟิตเนส";
+      card.append(link);
+
+      results.append(card);
+    });
+
+  } catch (error) {
+    results.textContent =
+      "ไม่สามารถแนะนำฟิตเนสได้: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+};
+
+if (typeof renderHeader === "function") {
+  renderHeader("recommend");
+}
+setupDates();
+loadEquipment();
+</script>
+
+<style id="location-ui-enhancement">
+  .location-hidden-coordinate {
+    display: none !important;
+  }
+  .location-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 15px;
+    margin: 8px 0 12px;
+    background: #eef8f4;
+    border: 1px solid #b7ddd2;
+    border-radius: 10px;
+    color: #165b51;
+    font-weight: 600;
+  }
+  .location-display .pin {
+    font-size: 20px;
+  }
+  .location-display small {
+    display: block;
+    font-weight: 400;
+    color: #56746a;
+  }
+</style>
+
+<script>
+(function () {
+  const lat = document.getElementById("lat");
+  const lng = document.getElementById("lng");
+
+  if (!lat || !lng) return;
+
+  // ซ่อนช่องพิกัดเดิม แต่ยังใช้ค่าในฟอร์มและ API
+  [lat, lng].forEach(input => {
+    const wrapper = input.closest(".field") || input.parentElement;
+    if (wrapper) wrapper.classList.add("location-hidden-coordinate");
+  });
+
+  const info = document.createElement("div");
+  info.className = "location-display";
+  info.setAttribute("role", "status");
+  info.innerHTML = `
+    <span class="pin" aria-hidden="true">📍</span>
+    <span>
+      <span id="location-text">มหาวิทยาลัยขอนแก่น (ตำแหน่งเริ่มต้น)</span>
+      <small>กดใช้ตำแหน่งปัจจุบัน เพื่อค้นหาฟิตเนสใกล้คุณ</small>
+    </span>
+  `;
+
+  const anchor = lat.closest(".field") || lat.parentElement;
+  if (anchor && anchor.parentElement) {
+    anchor.parentElement.insertBefore(info, anchor);
+  }
+
+  const gpsButton = [...document.querySelectorAll("button")]
+    .find(b => b.textContent.includes("ใช้ตำแหน่งปัจจุบัน"));
+
+  if (gpsButton) {
+    gpsButton.addEventListener("click", () => {
+      const text = document.getElementById("location-text");
+      if (text) text.textContent = "กำลังค้นหาตำแหน่งของคุณ…";
+    });
+  }
+
+  // ติดตามค่าที่ GPS อัปเดต โดยไม่แก้ callback เดิม
+  let previous = lat.value + "," + lng.value;
+  const observer = () => {
+    const current = lat.value + "," + lng.value;
+    if (current === previous) return;
+    previous = current;
+
+    const text = document.getElementById("location-text");
+    if (text) {
+      text.textContent = "ใช้ตำแหน่งปัจจุบันแล้ว";
+    }
+  };
+
+  lat.addEventListener("change", observer);
+  lng.addEventListener("change", observer);
+  lat.addEventListener("input", observer);
+  lng.addEventListener("input", observer);
+})();
+</script>
+
+</body>
+</html>
