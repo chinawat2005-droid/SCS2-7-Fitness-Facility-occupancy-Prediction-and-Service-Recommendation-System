@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fitness Reviews</title>
+<link rel="stylesheet" href="/site.css">
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: "Noto Sans Thai", system-ui, sans-serif;
+  background: #f4f6f3;
+  margin: 0;
+  color: #16241f;
+}
+header {
+  background: #16241f;
+  color: white;
+  padding: 28px 20px;
+  text-align: center;
+}
+main { max-width: 850px; margin: 30px auto; padding: 0 16px; }
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 18px #0000000b;
+}
+label { display: block; margin: 15px 0 8px; font-weight: 600; }
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  border: 1px solid #dce2eb;
+  border-radius: 9px;
+}
+textarea { min-height: 120px; resize: vertical; }
+.stars { display: flex; gap: 8px; }
+.star {
+  font-size: 32px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: #cbd5e1;
+  padding: 0;
+}
+.star.active { color: #f59e0b; }
+.primary {
+  background: #0f766e;
+  border: 0;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 9px;
+  cursor: pointer;
+  margin-top: 18px;
+}
+.primary:disabled { opacity: .6; cursor: wait; }
+.review {
+  border-top: 1px solid #e2e8f0;
+  padding: 18px 0;
+}
+.muted { color: #64748b; }
+.tag {
+  display: inline-block;
+  padding: 5px 9px;
+  margin: 4px 5px 0 0;
+  border-radius: 7px;
+  background: #e6f4f1;
+  color: #0f766e;
+  font-size: 13px;
+}
+.pos { color: #15803d; }
+.neg { color: #dc2626; }
+.neu { color: #64748b; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site">
+  <h1>Fitness Reviews</h1>
+  <nav></nav><div class="who"></div>
+</header>
+
+
+<div style="max-width:850px;margin:18px auto;padding:0 16px">
+  <a href="/" style="margin-right:16px">หน้าหลัก</a>
+  <a href="/recommend.html">แนะนำฟิตเนสและช่วงเวลา</a>
+</div>
+
+<main>
+<section class="card">
+  <h2>เขียนรีวิว</h2>
+  <form id="reviewForm">
+    <label for="gymId">เลือกฟิตเนส</label>
+    <select id="gymId" required>
+      <option value="">กำลังโหลดรายชื่อฟิตเนส...</option>
+    </select>
+
+    <label>คะแนนความพึงพอใจ</label>
+    <div class="stars" id="stars"></div>
+
+    <label for="reviewText">ข้อความรีวิว</label>
+    <textarea id="reviewText" minlength="2" maxlength="2000"
+      placeholder="เขียนรีวิวฟิตเนสที่นี่..." required></textarea>
+
+    <button type="submit" class="primary" id="submitButton">
+      ส่งรีวิว
+    </button>
+    <p id="message" role="status"></p>
+  </form>
+</section>
+
+<section class="card">
+  <h2>รีวิวจากผู้ใช้งาน</h2>
+  <p id="summary" class="muted"></p>
+  <div id="reviewList">กำลังโหลด...</div>
+</section>
+</main>
+
+<script src="/auth.js"></script>
+<script>renderHeader("reviews");</script>
+<script>
+let rating = 5;
+const stars = document.getElementById("stars");
+
+function renderStars() {
+  stars.replaceChildren();
+  for (let i = 1; i <= 5; i++) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "star" + (i <= rating ? " active" : "");
+    button.textContent = "★";
+    button.setAttribute("aria-label", i + " ดาว");
+    button.onclick = () => {
+      rating = i;
+      renderStars();
+    };
+    stars.append(button);
+  }
+}
+
+const aspectNames = {
+  equipment: "อุปกรณ์",
+  cleanliness: "ความสะอาด",
+  air_conditioning: "เครื่องปรับอากาศ",
+  staff: "พนักงาน",
+  service: "บริการ",
+  crowding: "ความหนาแน่น",
+  price: "ราคา"
+};
+
+const sentiments = {
+  pos: "เชิงบวก",
+  neg: "เชิงลบ",
+  neu: "เป็นกลาง"
+};
+
+async function reviewApi(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  if (options.body) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  const token = Session.token();
+  if (token) {
+    headers.Authorization = "Bearer " + token;
+  }
+
+  const response = await fetch(path, { ...options, headers });
+
+  if (!response.ok) {
+    let detail = "HTTP " + response.status;
+    try {
+      const body = await response.json();
+      if (typeof body.detail === "string") detail = body.detail;
+    } catch {}
+    throw new Error(detail);
+  }
+
+  return response.json();
+}
+
+function appendText(parent, tag, value, className = "") {
+  const el = document.createElement(tag);
+  el.textContent = value;
+  if (className) el.className = className;
+  parent.append(el);
+  return el;
+}
+
+async function loadReviews() {
+  const gymId = document.getElementById("gymId").value;
+  const list = document.getElementById("reviewList");
+  list.textContent = "กำลังโหลดรีวิว...";
+  try {
+    const [reviews, summary] = await Promise.all([
+      reviewApi(`/gyms/${gymId}/reviews`),
+      reviewApi(`/gyms/${gymId}/review-summary`)
+    ]);
+
+    document.getElementById("summary").textContent =
+      `คะแนนเฉลี่ย ${summary.avg_rating}/5 จาก ${summary.review_count} รีวิว`;
+
+    list.replaceChildren();
+    if (!reviews.length) {
+      list.textContent = "ยังไม่มีรีวิว";
+      return;
+    }
+
+    reviews.forEach(review => {
+      const box = document.createElement("div");
+      box.className = "review";
+
+      appendText(box, "strong", "★".repeat(review.rating) + " ");
+      appendText(box, "span",
+        sentiments[review.sentiment] || review.sentiment,
+        review.sentiment
+      );
+      appendText(box, "p", review.text);
+
+      (review.aspects || []).forEach(aspect => {
+        appendText(box, "span", aspectNames[aspect] || aspect, "tag");
+      });
+
+      appendText(box, "p",
+        new Date(review.created_at).toLocaleString("th-TH"), "muted"
+      );
+      list.append(box);
+    });
+  } catch (error) {
+    list.textContent = "โหลดรีวิวไม่สำเร็จ: " + error.message;
+  }
+}
+
+document.getElementById("reviewForm").onsubmit = async event => {
+  event.preventDefault();
+
+  if (!Session.token()) {
+    const next = encodeURIComponent("/reviews-page");
+    window.location.href = "/login.html?next=" + next;
+    return;
+  }
+
+  const button = document.getElementById("submitButton");
+  const message = document.getElementById("message");
+  const gymId = document.getElementById("gymId").value;
+
+  button.disabled = true;
+  message.textContent = "กำลังบันทึก...";
+  try {
+    await reviewApi(`/gyms/${gymId}/reviews`, {
+      method: "POST",
+      body: JSON.stringify({
+        rating,
+        text: document.getElementById("reviewText").value.trim()
+      })
+    });
+    message.textContent = "บันทึกรีวิวสำเร็จ";
+    document.getElementById("reviewText").value = "";
+    await loadReviews();
+  } catch (error) {
+    message.textContent = "ส่งรีวิวไม่สำเร็จ: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+};
+
+
+async function loadGyms() {
+  const select = document.getElementById("gymId");
+
+  try {
+    const gyms = await reviewApi("/gyms");
+
+    select.replaceChildren();
+
+    gyms.forEach(gym => {
+      const option = document.createElement("option");
+      option.value = gym.gym_id;
+      option.textContent = gym.name;
+      select.append(option);
+    });
+
+    if (!gyms.length) {
+      select.innerHTML = '<option value="">ไม่พบฟิตเนส</option>';
+      document.getElementById("reviewList").textContent =
+        "ยังไม่มีข้อมูลฟิตเนส";
+      return;
+    }
+
+    // เลือกฟิตเนสจาก gym_id ใน URL
+    const requestedGym = new URLSearchParams(
+      window.location.search
+    ).get("gym_id");
+
+    if (requestedGym) {
+      const exists = [...select.options].some(
+        option => option.value === requestedGym
+      );
+
+      if (exists) {
+        select.value = requestedGym;
+      }
+    }
+
+    await loadReviews();
+  } catch (error) {
+    select.innerHTML = '<option value="">โหลดไม่สำเร็จ</option>';
+    document.getElementById("reviewList").textContent = error.message;
+  }
+}
+
+document.getElementById("gymId").onchange = loadReviews;
+renderStars();
+loadGyms();
+</script>
+</body>
+</html>

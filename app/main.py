@@ -1,3 +1,4 @@
+from app.review_feature import router as review_router
 from math import asin, cos, radians, sin, sqrt
 from typing import Optional
 
@@ -10,6 +11,7 @@ from ml.current import forecast_now
 from ml.forecast_api import router as forecast_router
 
 app = FastAPI(title="Gym Occupancy API")
+app.include_router(review_router)
 init_users_table()
 app.include_router(auth_router)
 
@@ -76,8 +78,24 @@ from fastapi.staticfiles import StaticFiles
 
 app.include_router(forecast_router)
 
+
+@app.get("/reviews-page", include_in_schema=False)
+def reviews_page():
+    from pathlib import Path
+    from fastapi.responses import FileResponse
+
+    html = (
+        Path(__file__).resolve().parent.parent
+        / "frontend"
+        / "reviews.html"
+    )
+    return FileResponse(html, media_type="text/html")
+
 app.mount(
     "/",
     StaticFiles(directory=Path(__file__).resolve().parent.parent / "frontend", html=True),
     name="frontend",
 )
+
+
+# Fitness Reviews Page

@@ -28,7 +28,7 @@ async function api(path, opts = {}) {
 }
 
 function renderHeader(active) {
-  const links = [["/", "ฟิตเนส", "gyms"], ["/occupancy.html", "ความหนาแน่น", "occupancy"]];
+  const links = [["/", "ฟิตเนส", "gyms"], ["/occupancy.html", "ความหนาแน่น", "occupancy"], ["/reviews-page", "รีวิวฟิตเนส", "reviews"], ["/recommend.html", "แนะนำฟิตเนส", "recommend"]];
   document.querySelector("header.site nav").innerHTML = links
     .map(([href, label, id]) => `<a href="${href}"${id === active ? ' aria-current="page"' : ""}>${label}</a>`)
     .join("");
