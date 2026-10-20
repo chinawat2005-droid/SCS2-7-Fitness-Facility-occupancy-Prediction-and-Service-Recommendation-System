@@ -4,3 +4,5 @@ gym.db
 .venv/
 *.pyc
 .env
+*.bak
+*.sqlite3
