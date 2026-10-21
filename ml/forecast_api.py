@@ -25,7 +25,24 @@ from pydantic import BaseModel
 
 from ml.current import forecast_now
 from ml.forecast import forecast_day
+import sqlite3
+
 from ml.recommend import recommend
+
+DB_PATH = Path(__file__).resolve().parent.parent / "gym.db"
+
+
+def load_avg_ratings():
+    """คะแนนรีวิวเฉลี่ยรายยิมจาก gym.db ถ้ายังไม่มีฐานข้อมูล/ตาราง/รีวิว คืน {} (ไม่นำปัจจัยรีวิวมาคิด)"""
+    try:
+        con = sqlite3.connect(DB_PATH)
+        try:
+            rows = con.execute("SELECT gym_id, AVG(rating) FROM reviews GROUP BY gym_id").fetchall()
+        finally:
+            con.close()
+        return {int(g): round(float(a), 2) for g, a in rows if a is not None}
+    except sqlite3.Error:
+        return {}
 
 
 class HourForecast(BaseModel):
@@ -109,11 +126,11 @@ def post_recommend(req: RecommendRequest):
     if req.hour is not None and not 0 <= req.hour <= 23:
         raise HTTPException(status_code=422, detail="hour ต้องอยู่ระหว่าง 0-23")
     try:
-        return recommend(req.lat, req.lng, req.date, req.hour,
-                         req.need_equipment, req.prefer_quiet)
+            return recommend(req.lat, req.lng, req.date, req.hour,
+                         req.need_equipment, req.prefer_quiet,
+                         ratings=load_avg_ratings())
     except FileNotFoundError:
         raise HTTPException(status_code=503, detail=NO_MODEL)
-
 # แอปสำหรับทดสอบฝั่ง A เอง (ฝั่ง B ใช้ router ของตัวเองได้)
 app = FastAPI(title="Gym occupancy forecast API (part A)")
 app.add_middleware(
