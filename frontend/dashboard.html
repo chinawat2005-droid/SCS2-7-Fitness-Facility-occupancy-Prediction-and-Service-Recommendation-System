@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard ผู้ประกอบการ</title>
+<link rel="stylesheet" href="/site.css">
+<style>
+  .wrap{max-width:900px;margin:2rem auto;padding:0 1rem}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid #ccc;padding:.5rem;text-align:left}
+  .kpis{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
+  .kpi{border:1px solid #ccc;border-radius:8px;padding:.75rem 1rem;min-width:150px}
+  .kpi b{display:block;font-size:1.5rem}
+  .row{display:flex;align-items:center;gap:.5rem;margin:2px 0}
+  .lbl{width:48px}
+  .track{flex:1;background:#8881;height:14px;border-radius:3px}
+  .bar{background:#4a90d9;height:14px;border-radius:3px}
+  .bar.peak{background:#d94a4a}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Dashboard ผู้ประกอบการ</h1>
+  <label>สาขา: <select id="gym"></select></label>
+  <div class="kpis" id="kpis"></div>
+  <h2>สถานะแก้ปัญหาแบบย่อ</h2>
+  <table id="problems"><thead><tr><th>ปัญหา</th><th>จำนวน</th><th>การดำเนินการ</th><th>สถานะ</th></tr></thead><tbody></tbody></table>
+  <h2>ความหนาแน่นรายชั่วโมง (รวมทั้งวัน)</h2>
+  <div id="hours"></div>
+</div>
+<script>
+var gymId = 0;
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function load(){
+  fetch('/api/dashboard/summary?gym_id=' + gymId).then(function(r){return r.json();}).then(render);
+}
+
+function render(d){
+  var sel = document.getElementById('gym');
+  if (!sel.options.length){
+    var o = '<option value="0">ทุกสาขา</option>';
+    d.gyms.forEach(function(g){ o += '<option value="' + g.gym_id + '">' + esc(g.name) + '</option>'; });
+    sel.innerHTML = o;
+  }
+  var k = d.kpi;
+  document.getElementById('kpis').innerHTML =
+    '<div class="kpi">ความหนาแน่นเฉลี่ย<b>' + k.avg_occupancy_pct + '%</b></div>' +
+    '<div class="kpi">ชั่วโมงพีค<b>' + (k.peak_hour === null ? '-' : k.peak_hour + ':00') + '</b></div>' +
+    '<div class="kpi">รีวิวทั้งหมด<b>' + k.total_reviews + '</b></div>' +
+    '<div class="kpi">ปัญหาที่ยังเปิดอยู่<b>' + k.open_problems + '</b></div>';
+
+  var rows = '';
+  d.problems.forEach(function(p){
+    var opts = '';
+    d.states.forEach(function(s){
+      opts += '<option' + (s === p.state ? ' selected' : '') + '>' + s + '</option>';
+    });
+    rows += '<tr><td>' + esc(p.title) + '</td><td>' + p.count + '</td><td>' + esc(p.action) +
+      '</td><td><select data-key="' + esc(p.key) + '">' + opts + '</select></td></tr>';
+  });
+  document.querySelector('#problems tbody').innerHTML =
+    rows || '<tr><td colspan="4">ไม่พบปัญหา</td></tr>';
+
+  var bars = '';
+  d.occupancy_by_hour.forEach(function(h){
+    var w = Math.min(h.pct, 100);
+    bars += '<div class="row"><span class="lbl">' + h.hour + ':00</span><div class="track"><div class="bar' +
+      (h.pct >= 50 ? ' peak' : '') + '" style="width:' + w + '%"></div></div><span>' + h.pct + '%</span></div>';
+  });
+  document.getElementById('hours').innerHTML = bars;
+}
+
+document.getElementById('gym').addEventListener('change', function(e){
+  gymId = parseInt(e.target.value, 10); load();
+});
+
+document.querySelector('#problems tbody').addEventListener('change', function(e){
+  var key = e.target.getAttribute('data-key');
+  if (!key) return;
+  fetch('/api/dashboard/status', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({gym_id: gymId, issue_key: key, state: e.target.value})
+  }).then(load);
+});
+
+load();
+</script>
+</body>
+</html>

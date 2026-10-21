@@ -218,3 +218,18 @@ Python, pandas, NumPy, scikit-learn, XGBoost, joblib, matplotlib ส่วนห
 - นายฉัตรดนัย ไกรราช รหัสนักศึกษา 673380397-1
 
 รายวิชา CP353761 Computer Science Seminar มหาวิทยาลัยขอนแก่น
+
+## รันระบบทั้งหมด (รวม Dashboard ผู้ประกอบการ)
+
+```bash
+source .venv/bin/activate
+uvicorn app.run_all:app --reload
+```
+
+- หน้าหลัก: http://127.0.0.1:8000/
+- Dashboard ผู้ประกอบการ: http://127.0.0.1:8000/dashboard-page
+- API Dashboard: `GET /api/dashboard/summary`, `POST /api/dashboard/status`
+- เอกสาร API: http://127.0.0.1:8000/docs
+
+> `app.main:app` ยังรันแยกได้เหมือนเดิม แต่จะไม่มี Dashboard
+> ตารางสถานะแก้ปัญหา (`operator_issue_status`) ถูกสร้างอัตโนมัติใน `gym.db` ตอนเริ่มระบบ
