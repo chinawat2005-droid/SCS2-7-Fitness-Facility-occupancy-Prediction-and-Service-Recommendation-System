@@ -176,6 +176,19 @@ python ml/train_models.py
 # 5) ทดสอบฟังก์ชันพยากรณ์ และสร้างกราฟ
 python ml/forecast.py
 python ml/plot_hourly.py
+
+
+# 6) ฝึกโมเดลวิเคราะห์รีวิว -> models/sentiment.joblib
+python ml/sentiment.py
+
+# 7) สร้างฐานข้อมูล + รีวิวจำลองรายฟิตเนส -> gym.db
+python -m app.import_data
+python gen_gym_reviews.py
+python seed_reviews.py
+
+# 8) เปิดระบบ (เว็บ + API + Dashboard)
+uvicorn app.run_all:app --reload
+# เปิดเบราว์เซอร์ที่ http://127.0.0.1:8000
 ```
 
 ลำดับสำคัญ: ถ้าแก้ค่าใน `gen_occupancy_data.py` (ความจุ เวลาเปิด ปฏิทิน) ให้รันข้อ 3 และ 4 ใหม่ทุกครั้ง
