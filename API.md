@@ -13,8 +13,8 @@ Base URL (ตอนพัฒนา): `http://localhost:8000`
 | gyms | gym_id (PK), name, capacity, lat, lng, equipment, facilities, open_weekday, open_weekend |
 | occupancy | gym_id, datetime, date, hour, day_of_week, is_weekend, is_holiday, is_exam_period, count, capacity, occupancy_pct, level |
 | users | user_id (PK), username, password_hash, role (user/owner/admin) |
-| reviews | review_id (PK), gym_id, user_id, rating (1-5), text, created_at, sentiment (pos/neu/neg), aspects (เช่น "equipment;cleanliness") |
-| issues | issue_id (PK), gym_id, review_id, status (open/fixed/confirmed), updated_at |
+| reviews | review_id (PK), gym_id, user_id (ว่างได้ = รีวิวจำลอง), rating (1-5), text, sentiment (pos/neu/neg), aspects (JSON list เช่น `["equipment","cleanliness"]`), created_at |
+| operator_issue_status | gym_id, issue_key (ชื่อ aspect ที่เป็นปัญหา), state (ตารางของ Dashboard ผู้ประกอบการ) |
 
 `equipment` และ `facilities` เก็บเป็นข้อความคั่นด้วย `;` ตามไฟล์ CSV
 
@@ -59,6 +59,23 @@ Query (ไม่บังคับ): `lat`, `lng` ถ้าส่งมาจะ
   ]
 }
 ```
+### 2b) GET /gyms/{gym_id}/now  — A
+ความหนาแน่นที่พยากรณ์ ณ เวลาปัจจุบัน (เวลาไทย UTC+7) ถ้ายิมปิด `level` เป็น `closed`
+Query (ไม่บังคับ): `at=YYYY-MM-DDTHH:MM`
+
+```json
+{
+  "gym_id": 2,
+  "capacity": 120,
+  "at": "2026-10-21T17:00:00",
+  "hour": 17,
+  "model": "RandomForest",
+  "is_open": true,
+  "predicted_count": 89,
+  "predicted_pct": 74.2,
+  "level": "high"
+}
+```
 
 ### 3) POST /recommend  — A
 รับตำแหน่งผู้ใช้และความต้องการ ส่งอันดับยิม (และช่วงเวลาที่ดีที่สุด)
@@ -90,10 +107,9 @@ Response:
     }
   ]
 }
-หมายเหตุ: คะแนนรวมคิดจาก ความหนาแน่นที่พยากรณ์ (0.35) + ระยะทาง (0.30) + อุปกรณ์ที่ต้องการ (0.20) + คะแนนรีวิว (0.15)
-ถ้าไม่มีข้อมูลรีวิว จะตัดปัจจัยนั้นออกแล้วปรับน้ำหนักที่เหลือ `predicted_level` เป็น low / medium / high / closed
-ฝั่ง B เรียกใช้ใน Python ได้: `from ml.recommend import recommend` (ส่ง `ratings={gym_id: avg}` ได้)
 ```
+หมายเหตุ: คะแนนรวมคิดจาก ความหนาแน่นที่พยากรณ์ (0.35) + ระยะทาง (0.30) + อุปกรณ์ที่ต้องการ (0.20) + คะแนนรีวิว (0.15) ถ้า `prefer_quiet` เป็นจริง น้ำหนักความหนาแน่นเพิ่มเป็น 0.50 และให้คะแนนแบบยกกำลังสอง
+ระบบดึงคะแนนรีวิวเฉลี่ยจากตาราง `reviews` เอง ถ้าไม่มีข้อมูลรีวิว จะตัดปัจจัยนั้นออกแล้วปรับน้ำหนักที่เหลือ ยิมที่ปิดอยู่ได้คะแนน 0 `predicted_level` เป็น low / medium / high / closed
 
 ### 4) GET /gyms/{gym_id}/reviews  — B
 ```json
@@ -113,28 +129,35 @@ Response:
 Request: `{"user_id": 1, "rating": 4, "text": "..."}`
 Response: รีวิวที่บันทึกแล้ว (รูปแบบเดียวกับข้อ 4) พร้อม `sentiment` และ `aspects`
 
-### 6) POST /nlp/analyze  — A
-ฟังก์ชัน Python ที่ B import ใช้ตรงๆ ก็ได้ (`analyze(text) -> dict`) ไม่จำเป็นต้องเป็น HTTP
-Request: `{"text": "พนักงานดี แต่ห้องน้ำสกปรก"}`
-Response: `{"sentiment": "neu", "aspects": ["staff", "cleanliness"]}`
-
+### 6) วิเคราะห์รีวิว (Python function)  — A
+ไม่มี HTTP endpoint ฝั่ง B เรียกในโค้ด: `from ml.sentiment import analyze_review`
+`analyze_review("พนักงานดี แต่ห้องน้ำสกปรก")` คืนค่า
+```json
+{"sentiment": "neu", "confidence": 0.61, "aspects": ["staff", "cleanliness"]}
+```
 aspect ที่ใช้: `equipment`, `cleanliness`, `air_conditioning`, `staff`, `service`, `crowding`, `price`
 
-### 7) GET /owner/dashboard?gym_id=2  — B (ข้อมูลสรุปจาก A)
+### 7) GET /api/dashboard/summary?gym_id=2  — B
+ข้อมูลสรุปสำหรับ Dashboard ผู้ประกอบการ (ใช้ความหนาแน่นจากตาราง occupancy และรีวิวเชิงลบจากตาราง reviews)
 ```json
 {
   "gym_id": 2,
-  "avg_rating": 4.2,
-  "sentiment_counts": {"pos": 40, "neu": 12, "neg": 8},
-  "aspect_counts": {"equipment": 25, "cleanliness": 14},
-  "peak_hours_weekday": [18, 19],
-  "open_issues": 3
+  "gyms": [{"gym_id": 1, "name": "The Boys Gym Club"}],
+  "states": ["รอดำเนินการ", "กำลังแก้", "แก้แล้ว"],
+  "kpi": {"avg_occupancy_pct": 29.2, "peak_hour": 18, "peak_pct": 69.1, "total_reviews": 40, "open_problems": 8},
+  "problems": [
+    {"key": "aspect:staff", "title": "รีวิวเชิงลบเรื่องพนักงาน", "count": 6,
+     "action": "ทบทวนการดูแลของพนักงาน", "state": "รอดำเนินการ"}
+  ],
+  "occupancy_by_hour": [{"hour": 18, "pct": 69.1}]
 }
 ```
 
-### 8) Issues (ทำแบบย่อ)  — B
-- `GET /gyms/{gym_id}/issues`
-- `POST /issues/{issue_id}/status` body `{"status": "fixed"}` (owner) หรือ `{"status": "confirmed"}` (user)
+### 8) POST /api/dashboard/status  — B
+ผู้ประกอบการเปลี่ยนสถานะการแก้ปัญหา เก็บในตาราง `operator_issue_status`
+Request: `{"gym_id": 2, "issue_key": "aspect:staff", "state": "กำลังแก้"}`
+`gym_id` เป็น 0 = ทุกสาขา (ใช้กับ `summary` ที่ไม่ส่ง `gym_id`) `state` เป็นหนึ่งใน `รอดำเนินการ | กำลังแก้ | แก้แล้ว` ถ้าส่งค่าอื่นจะได้ 400
+Response: `{"ok": true}`
 
 ## กติกาการทำงานร่วมกัน
 
