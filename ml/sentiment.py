@@ -24,7 +24,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_PATH = ROOT / "models" / "sentiment.joblib"
 LABELS = ["neg", "neu", "pos"]
-ASPECT_THRESHOLD = 0.35  # ความน่าจะเป็นขั้นต่ำที่ถือว่า "พูดถึงประเด็นนี้"
+ASPECT_THRESHOLD = 0.50  # ความน่าจะเป็นขั้นต่ำที่ถือว่า "พูดถึงประเด็นนี้"
 
 
 def _read(path):

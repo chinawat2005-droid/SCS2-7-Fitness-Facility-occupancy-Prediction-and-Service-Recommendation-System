@@ -20,20 +20,20 @@ Confusion matrix (แถว=จริง, คอลัมน์=ทำนาย,
 == Aspects (ประเด็นที่พูดถึง) ==
                   precision    recall  f1-score   support
 
-air_conditioning      0.400     1.000     0.571         8
-     cleanliness      0.550     1.000     0.710        11
-        crowding      0.375     1.000     0.545        12
-       equipment      0.647     0.957     0.772        23
-           price      0.556     0.909     0.690        11
-         service      0.412     0.583     0.483        12
-           staff      0.591     0.929     0.722        14
+air_conditioning      0.875     0.875     0.875         8
+     cleanliness      0.800     0.727     0.762        11
+        crowding      1.000     0.917     0.957        12
+       equipment      0.955     0.913     0.933        23
+           price      0.900     0.818     0.857        11
+         service      0.857     0.500     0.632        12
+           staff      1.000     0.857     0.923        14
 
-       micro avg      0.509     0.912     0.654        91
-       macro avg      0.504     0.911     0.642        91
-    weighted avg      0.527     0.912     0.661        91
-     samples avg      0.548     0.762     0.613        91
+       micro avg      0.925     0.813     0.865        91
+       macro avg      0.912     0.801     0.848        91
+    weighted avg      0.922     0.813     0.860        91
+     samples avg      0.738     0.705     0.713        91
 
-Micro-F1 = 0.654
+Micro-F1 = 0.865
 
 == รีวิวที่ทาย sentiment ผิด (21 รายการ) ==
 - เครื่องเยอะมากครบทุกส่วน มาทีไรไม่ต้องรอคิว | จริง=pos ทาย=neu

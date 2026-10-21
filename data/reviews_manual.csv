@@ -1,4 +1,4 @@
-text,sentiment,aspects
+﻿text,sentiment,aspects
 เครื่องเยอะมากครบทุกส่วน มาทีไรไม่ต้องรอคิว,pos,equipment;crowding
 แอร์ไม่เย็นเลยร้อนมากตอนเย็น เหงื่อท่วม,neg,air_conditioning
 พนักงานน่ารักมากช่วยแนะนำท่าให้ฟรี,pos,staff
@@ -60,16 +60,16 @@ text,sentiment,aspects
 มาแล้วผิดหวัง ไม่เหมือนในรูปเลย,neg,service
 พอใช้ได้ ยังไม่รู้ต้องดูไปก่อน,neu,
 แอร์เย็นมากกกก,pos,air_conditioning
-ก็ธรรมดาทั่วไป,neu,ENDS
-ก็งั้นๆ,neg,ENDS
-ไม่เท่าไหร่,neg,ENDS
-ไม่เลว,neu,ENDS
-เยี่ยมเลย,pos,ENDS
-ดีมาก,pos,ENDS
-โครตเหี้ย,neg,ENDS
-โครตดี,pos,ENDS
-ดีชิบหาย,pos,ENDS
-ดีสัสๆ,pos,ENDS
+ก็ธรรมดาทั่วไป,neu,
+ก็งั้นๆ,neg,
+ไม่เท่าไหร่,neg,
+ไม่เลว,neu,
+เยี่ยมเลย,pos,
+ดีมาก,pos,
+โครตเหี้ย,neg,
+โครตดี,pos,
+ดีชิบหาย,pos,
+ดีสัสๆ,pos,
 เครื่องโครตเหี้ย,neg,equipment
 เครื่องน้อย,neg,equipment
 เครื่องดีมาก,pos,equipment
