@@ -186,7 +186,12 @@ python -m app.import_data
 python gen_gym_reviews.py
 python seed_reviews.py
 
-# 8) เปิดระบบ (เว็บ + API + Dashboard)
+# 8) สร้างบัญชีผู้ดูแลยิมและทีมพัฒนา (จะถามรหัสผ่านตอนรัน)
+#    admin_boys / admin_mega / admin_infinity / admin_bon / admin_nppark = ดูได้เฉพาะยิมตัวเอง
+#    dev_chinnawat / dev_chatdanay = ดูได้ทุกยิม
+python -m app.create_accounts
+
+# 9) เปิดระบบ (เว็บ + API + Dashboard)
 uvicorn app.run_all:app --reload
 # เปิดเบราว์เซอร์ที่ http://127.0.0.1:8000
 ```
