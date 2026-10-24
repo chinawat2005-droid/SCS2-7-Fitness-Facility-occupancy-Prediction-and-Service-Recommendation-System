@@ -20,6 +20,11 @@
 </style>
 </head>
 <body>
+<header class="site">
+  <h1>ฟิตเนสใกล้คุณ</h1>
+  <nav></nav>
+  <div class="who"></div>
+</header>
 <div class="wrap">
   <h1>Dashboard ผู้ประกอบการ</h1>
   <label>สาขา: <select id="gym"></select></label>
@@ -29,7 +34,10 @@
   <h2>ความหนาแน่นรายชั่วโมง (รวมทั้งวัน)</h2>
   <div id="hours"></div>
 </div>
+<script src="/auth.js?v=20261024-nav2"></script>
 <script>
+renderHeader("dashboard");
+
 var gymId = 0;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
