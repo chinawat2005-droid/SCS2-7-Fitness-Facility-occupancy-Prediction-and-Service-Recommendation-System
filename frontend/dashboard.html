@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard ผู้ประกอบการ</title>
 <link rel="stylesheet" href="/site.css">
+<script src="/auth.js"></script>
 <style>
   .wrap{max-width:900px;margin:2rem auto;padding:0 1rem}
   table{border-collapse:collapse;width:100%}
@@ -20,39 +21,60 @@
 </style>
 </head>
 <body>
-<header class="site">
-  <h1>ฟิตเนสใกล้คุณ</h1>
-  <nav></nav>
-  <div class="who"></div>
-</header>
 <div class="wrap">
   <h1>Dashboard ผู้ประกอบการ</h1>
+  <p id="who"></p>
   <label>สาขา: <select id="gym"></select></label>
   <div class="kpis" id="kpis"></div>
   <h2>สถานะแก้ปัญหาแบบย่อ</h2>
   <table id="problems"><thead><tr><th>ปัญหา</th><th>จำนวน</th><th>การดำเนินการ</th><th>สถานะ</th></tr></thead><tbody></tbody></table>
   <h2>ความหนาแน่นรายชั่วโมง (รวมทั้งวัน)</h2>
   <div id="hours"></div>
+  <h2>Feedback ล่าสุด</h2>
+  <table id="feedback"><thead><tr><th>วันที่</th><th>ยิม</th><th>คะแนน</th><th>ความรู้สึก</th><th>รีวิว</th></tr></thead><tbody></tbody></table>
 </div>
-<script src="/auth.js?v=20261024-nav2"></script>
 <script>
-renderHeader("dashboard");
-
 var gymId = 0;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
-function load(){
-  fetch('/api/dashboard/summary?gym_id=' + gymId).then(function(r){return r.json();}).then(render);
+function authHeaders(extra){
+  var h = extra || {};
+  var t = Session.token();
+  if (t) h['Authorization'] = 'Bearer ' + t;
+  return h;
 }
+
+function toLogin(){
+  location.href = '/login.html?next=' + encodeURIComponent('/dashboard-page');
+}
+
+function load(){
+  if (!Session.token()) { toLogin(); return; }
+  fetch('/api/dashboard/summary?gym_id=' + gymId, {headers: authHeaders()}).then(function(r){
+    if (r.status === 401) { Session.clear(); toLogin(); return null; }
+    if (r.status === 403) {
+      document.querySelector('.wrap').innerHTML = '<h1>ไม่มีสิทธิ์เข้าถึง</h1><p>บัญชีนี้ไม่ใช่ผู้ดูแลยิมหรือทีมพัฒนา</p><p><a href="/">กลับหน้าแรก</a></p>';
+      return null;
+    }
+    return r.json();
+  }).then(function(d){ if (d) render(d); });
+}
+
+var SENT = {pos: 'บวก', neu: 'กลาง', neg: 'ลบ'};
 
 function render(d){
   var sel = document.getElementById('gym');
+  var isOwner = d.role === 'owner';
+  document.getElementById('who').textContent = isOwner ? 'ผู้ดูแลยิม: ดูได้เฉพาะสาขาของตัวเอง' : 'ทีมพัฒนา: ดูได้ทุกสาขา';
+  if (isOwner) gymId = d.gym_id;
   if (!sel.options.length){
-    var o = '<option value="0">ทุกสาขา</option>';
+    var o = isOwner ? '' : '<option value="0">ทุกสาขา</option>';
     d.gyms.forEach(function(g){ o += '<option value="' + g.gym_id + '">' + esc(g.name) + '</option>'; });
     sel.innerHTML = o;
+    sel.value = String(gymId);
+    sel.disabled = isOwner;
   }
   var k = d.kpi;
   document.getElementById('kpis').innerHTML =
@@ -80,6 +102,13 @@ function render(d){
       (h.pct >= 50 ? ' peak' : '') + '" style="width:' + w + '%"></div></div><span>' + h.pct + '%</span></div>';
   });
   document.getElementById('hours').innerHTML = bars;
+
+  var fb = '';
+  d.feedback.forEach(function(f){
+    fb += '<tr><td>' + esc(String(f.created_at).slice(0, 10)) + '</td><td>' + esc(f.gym_name || '') +
+      '</td><td>' + f.rating + '</td><td>' + (SENT[f.sentiment] || '') + '</td><td>' + esc(f.text) + '</td></tr>';
+  });
+  document.querySelector('#feedback tbody').innerHTML = fb || '<tr><td colspan="5">ยังไม่มีรีวิว</td></tr>';
 }
 
 document.getElementById('gym').addEventListener('change', function(e){
@@ -91,7 +120,7 @@ document.querySelector('#problems tbody').addEventListener('change', function(e)
   if (!key) return;
   fetch('/api/dashboard/status', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: authHeaders({'Content-Type': 'application/json'}),
     body: JSON.stringify({gym_id: gymId, issue_key: key, state: e.target.value})
   }).then(load);
 });

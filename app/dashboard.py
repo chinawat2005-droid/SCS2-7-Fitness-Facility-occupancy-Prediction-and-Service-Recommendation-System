@@ -1,10 +1,11 @@
 import json
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import text
 
+from app.access import dashboard_user, scope_gym
 from app.database import engine
 
 router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
@@ -74,8 +75,8 @@ def _neg_aspects(conn, gym_id):
 
 
 @router.get("/summary")
-def summary(gym_id: Optional[int] = None):
-    g = gym_id or 0
+def summary(gym_id: Optional[int] = None, user: dict = Depends(dashboard_user)):
+    g = scope_gym(user, gym_id)
     with engine.connect() as conn:
         hourly = _hourly(conn, g)
         neg = _neg_aspects(conn, g)
@@ -92,6 +93,14 @@ def summary(gym_id: Optional[int] = None):
         ).scalar()
         gyms = [dict(r) for r in conn.execute(
             text("SELECT gym_id, name FROM gyms ORDER BY gym_id")).mappings().all()]
+        if user["role"] == "owner":
+            gyms = [x for x in gyms if x["gym_id"] == g]
+        fb_sql = ("SELECT r.review_id, r.gym_id, g.name AS gym_name, r.rating, r.text, "
+                  "r.sentiment, r.aspects, r.created_at FROM reviews r "
+                  "LEFT JOIN gyms g ON g.gym_id = r.gym_id"
+                  + (" WHERE r.gym_id = :g" if g else "")
+                  + " ORDER BY r.created_at DESC LIMIT 15")
+        feedback = [dict(r) for r in conn.execute(text(fb_sql), {"g": g} if g else {}).mappings().all()]
 
     problems = []
     peak_hours = [h["hour"] for h in hourly if h["pct"] >= PEAK_THRESHOLD]
@@ -116,6 +125,7 @@ def summary(gym_id: Optional[int] = None):
     avg = round(sum(h["pct"] for h in hourly) / len(hourly), 1) if hourly else 0
     return {
         "gym_id": g,
+        "role": user["role"],
         "gyms": gyms,
         "states": list(STATES),
         "kpi": {
@@ -127,11 +137,13 @@ def summary(gym_id: Optional[int] = None):
         },
         "problems": problems,
         "occupancy_by_hour": hourly,
+        "feedback": feedback,
     }
 
 
 @router.post("/status")
-def update_status(body: StatusUpdate):
+def update_status(body: StatusUpdate, user: dict = Depends(dashboard_user)):
+    gym = scope_gym(user, body.gym_id)
     if body.state not in STATES:
         raise HTTPException(400, "สถานะไม่ถูกต้อง")
     with engine.begin() as conn:
@@ -141,6 +153,6 @@ def update_status(body: StatusUpdate):
                 "VALUES (:g, :k, :s) "
                 "ON CONFLICT(gym_id, issue_key) DO UPDATE SET state = :s"
             ),
-            {"g": body.gym_id, "k": body.issue_key, "s": body.state},
+            {"g": gym, "k": body.issue_key, "s": body.state},
         )
     return {"ok": True}
