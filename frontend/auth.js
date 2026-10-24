@@ -67,3 +67,22 @@ function setupAuthForm(endpoint) {
     }
   });
 }
+
+// ปุ่ม "← หน้าหลัก" ลอยมุมซ้ายล่าง แสดงทุกหน้ายกเว้นหน้าหลัก
+(function () {
+  const p = location.pathname;
+  if (p === "/" || p === "/index.html") return;
+  function addBackButton() {
+    if (document.getElementById("back-home")) return;
+    const a = document.createElement("a");
+    a.id = "back-home";
+    a.href = "/";
+    a.textContent = "← หน้าหลัก";
+    a.style.cssText = "position:fixed;left:16px;bottom:16px;z-index:9999;padding:10px 16px;" +
+      "background:#1f2937;color:#fff;text-decoration:none;border-radius:999px;font-size:.95rem;" +
+      "box-shadow:0 2px 8px rgba(0,0,0,.3)";
+    document.body.appendChild(a);
+  }
+  if (document.body) addBackButton();
+  else document.addEventListener("DOMContentLoaded", addBackButton);
+})();
